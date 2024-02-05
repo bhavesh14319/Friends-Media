@@ -1,0 +1,88 @@
+.updateProfile {
+    min-height: 100vh;
+    /* background-image: linear-gradient(to right, #fff5bc, #cec1ff); */
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2vmax;
+    box-sizing: border-box;
+  }
+  
+  .updateProfileForm {
+    background-color: white;
+    width: 100%;
+    border-radius: 30px;
+    box-sizing: border-box;
+    padding: 2vmax;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+
+  
+  .updateProfileInputs {
+    box-sizing: border-box;
+    padding: 1vmax 2vmax;
+    width: 100%;
+    border-radius: 15px;
+    border: 2px solid #f2f2f2;
+    background-color: #fff;
+    margin-bottom: 30px;
+    font: 100 1.2rem "Roboto", sans-serif;
+    outline: none;
+  }
+  
+  .updateProfileForm > input[type="file"] {
+    border-radius: 30px;
+    margin: 2vmax;
+    margin-bottom: 30px;
+  }
+  
+  .updateProfileForm > input[type="file"]::-webkit-file-upload-button {
+    background-color: #FFDE69;
+    color: #000;
+    width: 70%;
+    padding: 1vmax;
+    border-radius: 15px;
+    border: none;
+    font: 400 1.2rem "Roboto", sans-serif;
+  }
+
+  .updateBtn{
+    background: #FFDE69;
+    padding: 1vmax;
+    border-radius: 15px;
+    border: none;
+    color: #000;
+    width: 80%;
+    font: 400 1.2rem "Roboto", sans-serif;
+
+  }
+  
+  @media screen and (min-width: 600px) {
+
+
+
+    .updateProfileForm {
+      width: 40%;
+      margin-top: 80px;
+    }
+  
+    .updateProfileForm > input {
+      /* padding: 4vw 8vw; */
+      /* margin: 2vmax; */
+      font: 100 1.2rem "Roboto", sans-serif;
+      /* margin: 4vw; */
+    }
+  
+    .updateProfileForm > input[type="file"] {
+      width: 70%;
+    }
+  
+    .updateProfileForm > input[type="file"]::-webkit-file-upload-button {
+      width: 70%;
+    }
+  }

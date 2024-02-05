@@ -1,0 +1,195 @@
+.account {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column-reverse;
+    /* grid-template-columns: 1fr 400px; */
+    min-height: 100vh;
+    padding-top: 100px;
+    justify-content: flex-end;
+  }
+  
+  .accountleft {
+    background:#FFF;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2vmax;
+    box-sizing: border-box;
+    overflow-y: scroll;
+  }
+  .accountright {
+    padding: 2vmax;
+    
+    /* padding: 15px 0; */
+    /* height: 25vh; */
+    height: auto;
+    box-sizing: border-box;
+    /* overflow-y: auto; */
+    display: flex;
+    /* flex-direction: ; */
+    align-items: center;
+    border-bottom: 2PX SOLID #f2f2f2;
+  }
+
+  .avatarName{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 10px;
+    margin-right: 30px;
+  }
+  
+  .accountright img:hover {
+    transform: scale(1.1);
+  }
+  
+  .accountright img {
+    transition: all 0.5s;
+  }
+  
+  .accountright > h5 {
+    margin: 2vmax;
+  }
+  
+  .accountright > a {
+    color: rgb(73, 73, 73);
+    text-decoration: none;
+    font: 100 1.2rem "Roboto";
+    text-align: center;
+    margin-top: 2vmax;
+    padding: 0.5vmax 1vmax;
+    transition: all 0.5s;
+  }
+  
+  .accountright > a:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.253);
+  }
+
+  .btnsCont{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-self: center;
+  }
+  .btns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* margin: 1vmax; */
+    align-self: center;
+  }
+  
+  .btns>p{
+    padding: 0.5vmax 1vmax;
+  }
+
+  .accountright > div > button:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.253);
+  }
+  .btnsCont >div> button {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.5s;
+    padding: 0.5vmax 1vmax;
+  }
+
+  .settingsIcon{
+    position: absolute;
+    top: 100px;
+    right: 15px;
+    cursor: pointer;
+  }
+
+  .menuItem{
+    width: 100%;
+    justify-content: center !important;
+  }
+
+ .menuItem>a{
+  color: rgb(73, 73, 73);
+  text-decoration: none;
+  font: 100 1.2rem "Roboto";
+  text-align: center;
+  /* margin-top: 2vmax; */
+  padding: 0.5vmax 1vmax;
+  transition: all 0.5s;
+
+ } 
+ .menuItem>a:hover{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.253);
+ }
+
+ .followBtn{
+  position: absolute;
+  top: 100px;
+  right: 10px;
+
+ }
+
+ .followBtn>button{
+  background: #FFDE69;
+  color: #000;
+  font-weight: 400;
+  padding: 8px;
+  border-radius: 10px;
+  font-size:18px;
+  border: none;
+  cursor: pointer;
+ }
+
+ 
+  @media screen and (min-width: 600px) {
+    .account {
+      /* grid-template-columns: 2fr 1fr; */
+      width: 80%;
+      margin: 0 auto;
+      padding-bottom: 20px;
+
+    }
+
+    .btnsCont{
+      width: 40%;
+      justify-content: flex-start;
+      align-self: flex-start;
+    }
+
+    .btns{
+      min-width: 100px;
+    }
+
+    .settingsIcon{
+      right: 10%;
+    }
+
+    .settingsIcon>svg{
+      font-size: 2.5vw;
+    }
+
+    .accountright{
+      padding: 1vmax;
+    }
+  
+    .accountleft {
+      padding: 1vmax;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items:start;
+      overflow: visible;
+    
+      /* min-height: 90vh; */
+    }
+  
+    .accountright > a {
+      font: 100 1rem "Roboto";
+      /* margin-top: 6vw; */
+    }
+
+    .followBtn{
+      /* right: 10%; */
+      left: 23%;
+      top: 28%;
+      cursor: pointer;
+    }
+  }

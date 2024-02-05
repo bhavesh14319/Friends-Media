@@ -1,0 +1,81 @@
+.register {
+    min-height: 100vh;
+    background-image: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2vmax;
+    box-sizing: border-box;
+
+  }
+
+
+  
+  .registerForm {
+    z-index: 1;
+    width: 100%;
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 2vmax;
+    display: flex;
+    opacity: 1;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #f2f2f2;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+  
+.avatar{
+  width: 30vw !important;
+  height: 30vw !important;
+}
+
+  .registerInputs {
+    box-sizing: border-box;
+    padding: 1vmax 2vmax;
+    width: 100%;
+    border-radius: 15px;
+    border: 2px solid #f2f2f2;
+    background-color: #fff;
+    margin-bottom: 30px;
+    font: 100 1.2rem "Roboto", sans-serif;
+    outline: none;
+  }
+  
+  .registerForm > input[type="file"] {
+    border-radius: 30px;
+    margin: 2vmax;
+    margin-bottom: 30px;
+  }
+  
+  .registerForm > input[type="file"]::-webkit-file-upload-button {
+    background-color: #FFDE69;
+    color: #000;
+    width: 100%;
+    padding: 1vmax;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    font: 400 1.2rem "Roboto", sans-serif;
+  }
+  
+  .registerForm > a {
+    align-self: flex-end;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.342);
+    margin: 2vmax;
+  }
+  
+
+
+  @media screen and (min-width:600px) {
+    .registerForm{
+      width: 40%;
+    }
+
+    .avatar{
+      width: 15vw !important;
+      height: 15vw !important;
+    }
+
+  }
