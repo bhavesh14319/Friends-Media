@@ -1,0 +1,22 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar{
+  width: 10px;
+ 
+}
+
+::-webkit-scrollbar-track{
+  background:lightgray;
+  height: 20px;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #777;
+}
+
+.swal2-container{
+  z-index: 5000;
+}

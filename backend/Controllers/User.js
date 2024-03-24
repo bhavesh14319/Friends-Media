@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
     try {
         const { name, email, password} = req.body;
 
-        console.log(req.body)
+        //console.log(req.body)
         const avatar = req.body.image
 
 
@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
             folder:"avatars"
         })
 
-        console.log(mycloud.secure_url);
+        //console.log(mycloud.secure_url);
 
         user = await User.create({
             name,
@@ -73,7 +73,7 @@ const registerUser = async (req, res) => {
 
 
     } catch (e) {
-        console.log("error")
+        //console.log("error")
         res.status(500).json({
             success: false,
             message: e.message
@@ -100,7 +100,7 @@ const loginUser = async (req, res) => {
         }
 
         const isMatch = await matchPassword(password, user.password);
-        console.log(isMatch)
+        //console.log(isMatch)
         if (!isMatch) {
             return res.status(400).json({
                 success: false,
@@ -176,7 +176,7 @@ const followUser = async (req, res) => {
             await userToFollow.save();
 
             res.status(200).json({
-                succeess: true,
+                success: true,
                 message: "User unfollowed"
             })
 
@@ -224,7 +224,7 @@ const updatePassword = async (req, res) => {
         
 
         const isMatch = await matchPassword(oldPassword, user.password);
-        console.log(isMatch);
+        //console.log(isMatch);
 
         if (!isMatch) {
             return res.status(400).json({
@@ -414,7 +414,7 @@ const deleteUser = async (req, res) => {
 
 const myProfile = async (req, res) => {
     try {
-
+        //console.log(req.user);
         const user = await User.findById(req.user._id).populate("posts followers following");
 
         const token = await generateToken(user._id);       
@@ -443,13 +443,13 @@ const getUserProfile  = async (req,res) =>{
 
         if(!user){
             res.status(404).json({
-                succeess:false,
+                success:false,
                 message:"user not found"
             })
         }
 
         res.status(200).json({
-            succeess:true,
+            success:true,
             user
         })
 
@@ -462,15 +462,27 @@ const getUserProfile  = async (req,res) =>{
 }
 
 
-const getAllUsers = async(req,res)=>{
+const getSuggestedUsers = async (req,res)=>{
     try{
-
-        const users = await User.find({
+        const userId = req.user._id;
+        //console.log(req.user);
+        let users = await User.find({
             name: { $regex: req.query.name, $options: "i" },
           });
 
+        if(!users){
+            res.status(400).json({
+                success:false,
+                message:"no users found"
+            })
+        }  
+
+        // if req.user.following containes user._id then remove that user
+        // && !req.user.following.includes(user._id)
+        users = users.filter((user)=>(String(user._id)!==String(userId)))
+
         res.status(200).json({
-            succeess:true,
+            success:true,
             users
         })
 
@@ -480,8 +492,112 @@ const getAllUsers = async(req,res)=>{
             message: e.message
         })
     }
+    
 }
 
+const getAllUsers = async(req,res)=>{
+    try{
+
+        const users = await User.find({
+            name: { $regex: req.query.name, $options: "i" },
+          });
+
+        res.status(200).json({
+            success:true,
+            users
+        })
+
+    }catch(e){
+        res.status(500).json({
+            success: false,
+            message: e.message
+        })
+    }
+
+
+}
+
+const getUserFeed = async (req,res)=>{
+    try{
+        const userId = req.user._id;
+        //console.log(req.user)
+        let feedPosts = await Post.find().populate("owner likes comments.user");
+
+        if(!feedPosts){
+            return res.status(400).json({
+                success:false,
+                message:"posts not found"
+            })
+        }
+        //console.log(feedPosts.length)
+   
+        feedPosts= feedPosts.filter((post)=>String(post.owner._id) !== String(userId));
+        //console.log(feedPosts.length)
+   
+
+        return res.status(200).json({
+            success:true,
+            posts:feedPosts
+        })
+    }catch(e){
+        return res.status(500).json({
+            success:false,
+            message:e.message
+        })
+    }
+}
+
+
+const getFeedData = async (req,res)=>{
+    try{
+        const feedPosts = await Post.find().populate("owner likes comments.user");
+
+        if(!feedPosts){
+            return res.status(400).json({
+                success:false,
+                message:"posts not found"
+            })
+        }
+
+        return res.status(200).json({
+            success:true,
+            posts:feedPosts
+        })
+
+    }catch(e){
+        return res.status(500).json({
+            success:false,
+            message:e.message
+        })
+    }
+}
+
+const getLatestPosts = async (req,res)=>{
+    try{
+
+        const latestPosts = await Post.find({}).sort({$natural:-1}).limit(6)
+        
+        
+        if(!latestPosts){
+            return res.status(400).json({
+                success:false,
+                message:"posts not found"
+            })
+        }
+
+        return res.status(200).json({
+            success:true,
+            posts:latestPosts
+        })
+
+    }catch(e){
+        return res.status(500).json({
+            success:false,
+            message:e.message
+
+        })
+    }
+}
 
 const forgotPassword = async(req,res)=>{
     try{
@@ -498,7 +614,7 @@ const forgotPassword = async(req,res)=>{
         let resetToken = getResetPasswordToken();
         let resetPasswordToken = resetToken;
         resetPasswordToken = crypto.createHash("sha256").update(resetPasswordToken).digest('hex');
-        console.log(resetPasswordToken);
+        //console.log(resetPasswordToken);
         user.resetPasswordToken = resetPasswordToken;
         user.resetPasswordExpire = Date.now() + 10*60*1000;
         
@@ -546,15 +662,15 @@ const resetPassword = async (req,res)=>{
     try{
         const resetToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
 
-        console.log("params " , req.params.token);
+        //console.log("params " , req.params.token);
 
-        console.log("hashed", resetToken)
+        //console.log("hashed", resetToken)
         const user = await User.findOne({
             resetPasswordToken:resetToken,
             resetPasswordExpire:{$gt : Date.now()}
             }).select("+password")
 
-        console.log(user);
+        //console.log(user);
         if(!user){
             return res.status(401).json({
                 succeess:false,
@@ -635,4 +751,4 @@ const getUserPosts = async(req,res)=>{
 }
 
 
-module.exports = { registerUser, loginUser, followUser, logoutUser, updatePassword, updateProfile, deleteUser, myProfile ,getUserProfile,getAllUsers,forgotPassword, resetPassword ,getPosts , getUserPosts}
+module.exports = { registerUser, loginUser, followUser, logoutUser, updatePassword, updateProfile, deleteUser, myProfile ,getUserProfile,getAllUsers,getFeedData, forgotPassword, resetPassword ,getPosts , getUserPosts,getLatestPosts,getUserFeed,getSuggestedUsers}

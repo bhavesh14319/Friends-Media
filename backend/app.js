@@ -2,19 +2,19 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
-// const fileupload = require("express-fileupload")
-const multer = require("multer");
 
-// const bodyParser = require("body-parser");
 
-// const upload = multer({dest:"uploads/"})
 
 
 dotenv.config();
 app.use(require("cookie-parser")())
-//using middleware
+
+
+
 app.use(cors({
-    origin: "https://friendsmedia.netlify.app",
+    // origin: "https://friendsmedia.netlify.app",
+    origin:"http://localhost:3000",
+    methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE'],
     credentials: true
 }))
 app.use(express.json({ limit: "50mb" }));
