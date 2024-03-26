@@ -1,13 +1,14 @@
 import axios from "axios"
 import {BASE_URL} from "../utils/constants"
-import { authFailure, authRequest, authSuccess } from "../redux/AuthSlice"
-import { latestPostsSuccess, postsSuccess, startPostsLoading, stopPostsLoading, suggestedUsersSuccess } from "../redux/feedSlice"
+import { authFailure, authRequest, authSuccess, logoutSuccess } from "../redux/AuthSlice"
+import { latestPostsSuccess, postsSuccess, requestFailure, startPostsLoading, stopPostsLoading, suggestedUsersRequest, suggestedUsersSuccess } from "../redux/feedSlice"
+import { userFailure, userRequest, userSuccess } from "../redux/userSlice"
 let url=BASE_URL
 
 export const loginUser = async (email, password)=> {
     try {
  
-        const res = await axios.post(url+"/login", { email, password }, {
+        const res = await axios.post("/login", { email, password }, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -32,7 +33,7 @@ export const loginUser = async (email, password)=> {
 export const registerUser = async (name, email, password, image)  => {
     try {
 
-        const res = await axios.post(url+"/register", { name, email, password, image }, {
+        const res = await axios.post("/register", { name, email, password, image }, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -58,7 +59,7 @@ export const loadUser = (id)=> async (dispatch) =>  {
         
         dispatch(authRequest());
 
-        const res = await axios.get(url+"/user", {
+        const res = await axios.get("/user", {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -78,12 +79,12 @@ export const loadUser = (id)=> async (dispatch) =>  {
 }
 
 
-export const logoutUser =async () => {
+export const logoutUser =()=> async (dispatch) => {
     try {
 
+        dispatch(authRequest());
 
-
-        const res = await axios.get(url+"api/v1/logout", {
+        const res = await axios.get("/logout", {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -93,9 +94,12 @@ export const logoutUser =async () => {
 
         localStorage.removeItem("token");
 
+        dispatch(logoutSuccess());
+
         return res.data
 
     } catch (e) {
+        dispatch(authFailure(e.response.data.message))
         return e.response
     }
 }
@@ -104,7 +108,7 @@ export const getFollowingPost =async () => {
     try {
 
     
-        const { data } = await axios.get(url+"api/v1/getFollowingPosts", {
+        const { data } = await axios.get("/getFollowingPosts", {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -126,7 +130,8 @@ export const getFollowingPost =async () => {
 export const getSuggestedUsersData =(name = "")=> async (dispatch) => {
     try {
 
-        const res = await axios.get(url+`/getSuggestedUsers?name=${name}`, {
+        dispatch(suggestedUsersRequest())
+        const res = await axios.get(`/getSuggestedUsers?name=${name}`, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -138,7 +143,7 @@ export const getSuggestedUsersData =(name = "")=> async (dispatch) => {
         return res.data
 
     } catch (e) {
-        
+        dispatch(requestFailure(e.response.data.message))
         return e.response
     }
 }
@@ -146,20 +151,28 @@ export const getSuggestedUsersData =(name = "")=> async (dispatch) => {
 
 export const getAllUsers =(name = "")=> async (dispatch) => {
     try {
-
-        const res = await axios.get(url+`/users?name=${name}`, {
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            withCredentials: true
-        })
+        
+        dispatch(suggestedUsersRequest());
+        const res = await axios.get(`/users?name=${name}`)
         // console.log(res.data)
         dispatch(suggestedUsersSuccess(res.data.users))
      
     } catch (e) {
-        
+        dispatch(requestFailure(e.response.data.message))
         console.log(e.response)
+    }
+}
+
+
+export const searchUsers =async (name)=>{
+    try {
+
+        const res = await axios.get(`/users?name=${name}`)
+        // console.log(res.data)
+        return res.data;
+     
+    } catch (e) {
+        return e.response;
     }
 }
 
@@ -168,7 +181,7 @@ export const getMyPost =async () => {
     try {
 
 
-        const res= await axios.get(url+"api/v1/user/posts", {
+        const res= await axios.get("/user/posts", {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -192,7 +205,7 @@ export const updateProfile = (name, email, image) => async (dispatch) => {
             type: "updateProfileRequest"
         })
 
-        const res = await axios.put(url+"api/v1/update/profile", { name, email, image }, {
+        const res = await axios.put("/update/profile", { name, email, image }, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -223,7 +236,7 @@ export const updatePassword = (oldPassword, newPassword) => async (dispatch) => 
             type: "updatePasswordRequest"
         })
 
-        const res = await axios.put(url+"api/v1/update/password", { oldPassword, newPassword }, {
+        const res = await axios.put("/update/password", { oldPassword, newPassword }, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -253,7 +266,7 @@ export const deleteProfile = () => async (dispatch) => {
             type: "deleteProfileRequest"
         })
 
-        const res = await axios.delete(url + "api/v1/delete/me", {
+        const res = await axios.delete("/delete/me", {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -285,7 +298,7 @@ export const forgotPassword = (email) => async (dispatch) => {
             type: "forgotPasswordRequest"
         })
 
-        const { data } = await axios.post( url + "api/v1/forgot/password", { email }, {
+        const { data } = await axios.post( "/forgot/password", { email }, {
 
             headers: {
                 "Content-Type": "application/json",
@@ -317,7 +330,7 @@ export const resetPassword = (token, password) => async (dispatch) => {
             type: "resetPasswordRequest"
         })
 
-        const { data } = await axios.put(url + `api/v1/password/reset/${token}`, { password }, {
+        const { data } = await axios.put(`/password/reset/${token}`, { password }, {
 
             headers: {
                 "Content-Type": "application/json",
@@ -347,7 +360,7 @@ export const getUserPosts =async (id) => {
     try {
 
   
-        const res = await axios.get(url+`api/v1/user/posts/${id}`, {
+        const res = await axios.get(`/user/posts/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -364,12 +377,10 @@ export const getUserPosts =async (id) => {
 }
 
 
-export const getUserProfile = async(id) => {
+export const getUserProfile = (id)=> async(dispatch) => {
     try {
-
- 
-
-        const res = await axios.get( url + `api/v1/user/${id}`, {
+        dispatch(userRequest());
+        const res = await axios.get( `/user/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -377,10 +388,12 @@ export const getUserProfile = async(id) => {
             withCredentials: true
         })
 
+        dispatch(userSuccess(res.data.user))
         return res.data
 
 
     } catch (e) {
+        dispatch(userFailure())
         return e.response
     }
 }
@@ -391,7 +404,7 @@ export const followUnfollow = async (id) =>  {
     try {
 
 
-        const res= await axios.get( url+`/follow/${id}`, {
+        const res= await axios.get(`/follow/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -414,15 +427,15 @@ export const followUnfollow = async (id) =>  {
 export const getFeedData =()=> async(dispatch)=>{
     try{
         dispatch(startPostsLoading())
-        const res = await axios.get(BASE_URL + "/getFeedData");
-
+        const res = await axios.get("/getFeedData");
+       
         // console.log(res.data);
         dispatch(postsSuccess(res.data.posts))
         dispatch(stopPostsLoading());
 
     }catch(e){
         console.log(e.response)
-        dispatch(stopPostsLoading());
+        dispatch(requestFailure(e.response.data.message))
     }
 }
 
@@ -431,7 +444,7 @@ export const getUserFeedData = ()=> async(dispatch)=>{
     try{
 
         dispatch(startPostsLoading())
-        const res = await axios.get(BASE_URL + "/getUserFeed",{
+        const res = await axios.get("/getUserFeed",{
             headers:{
                 Authorization:`Bearer ${localStorage.getItem('token')}`
             }
@@ -443,8 +456,7 @@ export const getUserFeedData = ()=> async(dispatch)=>{
 
     }catch(e){
 
-        console.log(e.response)
-        dispatch(stopPostsLoading());
+        dispatch(requestFailure(e.response.data.message))
     }
 }
 
@@ -452,7 +464,7 @@ export const getUserFeedData = ()=> async(dispatch)=>{
 export const getLatestPosts =()=> async(dispatch)=>{
     try{
 
-        const res = await axios.get(BASE_URL + "/getLatestPosts");
+        const res = await axios.get("/getLatestPosts");
 
         dispatch(latestPostsSuccess(res.data.posts))
         return res.data;

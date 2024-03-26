@@ -6,6 +6,7 @@ const feedSlice = createSlice({
         postsLoading:false,
         likeOrCommentLoading:false,
         posts:[],
+        usersLoading:false,
         suggestedUsers : [],
         latestPosts : [],
         message:null,
@@ -22,7 +23,11 @@ const feedSlice = createSlice({
         stopPostsLoading:(state,action)=>{
             state.postsLoading=false
         },
+        suggestedUsersRequest:(state,action)=>{
+            state.usersLoading=true;
+        },
         suggestedUsersSuccess : (state,action)=>{
+            state.usersLoading=false;
             state.suggestedUsers=action.payload
         },
 
@@ -38,7 +43,9 @@ const feedSlice = createSlice({
         likeOrCommentSuccess:(state,action)=>{
             state.message=action.payload
         },
-        likeOrCommentFailure:(state,action)=>{
+        requestFailure:(state,action)=>{
+            state.postsLoading=false;
+            state.usersLoading=false;
             state.error=action.payload
         },
         clearMessage:(state,action)=>{
@@ -52,5 +59,5 @@ const feedSlice = createSlice({
 })
 
 
-export const {postsSuccess,suggestedUsersSuccess,latestPostsSuccess,likeOrCommentFailure,likeOrCommentSuccess,clearError,clearMessage,startPostsLoading,stopPostsLoading,startLikeOrCommentLoading,stopLikeOrCommentLoading} = feedSlice.actions
+export const {postsSuccess,suggestedUsersSuccess,latestPostsSuccess,likeOrCommentSuccess,clearError,clearMessage,startPostsLoading,stopPostsLoading,startLikeOrCommentLoading,stopLikeOrCommentLoading,requestFailure,suggestedUsersRequest} = feedSlice.actions
 export default feedSlice.reducer

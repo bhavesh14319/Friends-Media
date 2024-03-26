@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteComment } from '../../Actions/post'
+import { deleteComment, getPostData } from '../../Actions/post'
 import {  getUserFeedData } from '../../Actions/User'
 
 import { Avatar, Divider, IconButton, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
@@ -17,7 +17,7 @@ const CommentCard = ({
 
 
 
-    const {authorizedUser:user} = useSelector((state)=>state.authStates);
+    const { authorizedUser:user} = useSelector((state)=>state.authStates);
 
 
 
@@ -32,6 +32,7 @@ const CommentCard = ({
     // isCommentOwner? comment.user._id === user._id
     const handleDelete = async () => {
         await dispatch(deleteComment(postId,comment._id));
+        await dispatch(getPostData(postId))
 
         if(isAccount){
             // load posts of logged in user

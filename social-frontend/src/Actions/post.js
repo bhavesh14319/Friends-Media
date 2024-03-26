@@ -1,13 +1,37 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/constants"
-import { likeOrCommentFailure, likeOrCommentSuccess, startLikeOrCommentLoading, stopLikeOrCommentLoading } from "../redux/feedSlice";
+import { requestFailure, likeOrCommentSuccess, startLikeOrCommentLoading, stopLikeOrCommentLoading } from "../redux/feedSlice";
+import { createPostFailure, createPostRequest, createPostSuccess } from "../redux/createPostSlice";
+import { postFailure, postRequest, postSuccess } from "../redux/postSlice";
 
 let url = BASE_URL;
+
+
+
+export const getPostData = (id)=> async (dispatch)=>{
+    try{
+        dispatch(postRequest())
+        const res = await axios.get(`/post/${id}`,{
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            withCredentials: true 
+        });
+
+        dispatch(postSuccess(res.data.post))
+        return res.data;
+
+    }catch(e){
+        dispatch(postFailure())
+        return e.response;
+    }
+}
 
 export const likePost = (id) => async (dispatch) => {
     try {
 
-        const res = await axios(`${url}/post/${id}`, {
+        const res = await axios(`/likepost/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -21,7 +45,7 @@ export const likePost = (id) => async (dispatch) => {
 
 
     } catch (e) {
-        dispatch(likeOrCommentFailure(e.response.data.message))
+        dispatch(requestFailure(e.response.data.message))
         return e.response;
     }
 }
@@ -31,7 +55,7 @@ export const addComment = (id, comment) => async (dispatch) => {
     try {
 
         dispatch(startLikeOrCommentLoading())
-        const { data } = await axios.put(url + `/post/comment/${id}`, {
+        const { data } = await axios.put(`/post/comment/${id}`, {
             comment,
         }, {
             headers: {
@@ -49,7 +73,7 @@ export const addComment = (id, comment) => async (dispatch) => {
 
     } catch (e) {
         console.log(e.response)
-        dispatch(likeOrCommentFailure(e.response.data.message))
+        dispatch(requestFailure(e.response.data.message))
         dispatch(stopLikeOrCommentLoading())
     }
 }
@@ -61,7 +85,7 @@ export const deleteComment = (postId, commentId) => async (dispatch) => {
 
         console.log(localStorage.getItem('token'))
 
-        const res = await axios.delete(url + `/post/comment/${postId}`, {
+        const res = await axios.delete( `/post/comment/${postId}`, {
             data: { commentId },
             
             headers: { 
@@ -75,17 +99,17 @@ export const deleteComment = (postId, commentId) => async (dispatch) => {
         dispatch(likeOrCommentSuccess(res.data.message))
     } catch (e) {
         console.log(e.response)
-        dispatch(likeOrCommentFailure(e?.response.data.message))
+        dispatch(requestFailure(e?.response.data.message))
     }
 };
 
 
-export const createPost = async (caption, image) => {
+export const createPost = (caption, image)=> async (dispatch) => {
     try {
 
-        console.log(image);
+        dispatch(createPostRequest())
 
-        const res = await axios.post(`${url}api/v1/post/upload`, {
+        const res = await axios.post(`/post/upload`, {
             caption, image
         }, {
             headers: {
@@ -95,10 +119,11 @@ export const createPost = async (caption, image) => {
             withCredentials: true
         });
 
+        dispatch(createPostSuccess(res.data))
         return res.data
 
     } catch (e) {
-
+        dispatch(requestFailure(e.response.data.message))
         return e.response
     }
 }
@@ -110,7 +135,7 @@ export const deletePost = (id) => async (dispatch) => {
             type: "deltePostRequest",
         });
 
-        const { data } = await axios.delete(`https://bright-hose.cyclic.app/api/v1/post/${id}`, {
+        const { data } = await axios.delete(`/post/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -133,11 +158,10 @@ export const deletePost = (id) => async (dispatch) => {
 
 export const updatePost = (caption, id) => async (dispatch) => {
     try {
-        dispatch({
-            type: "updatePostRequest",
-        });
+        
+        dispatch(postRequest())
 
-        const { data } = await axios.put(`https://bright-hose.cyclic.app/api/v1/post/${id}`, {
+        const { data } = await axios.put(`/post/${id}`, {
             caption
         }, {
             headers: {

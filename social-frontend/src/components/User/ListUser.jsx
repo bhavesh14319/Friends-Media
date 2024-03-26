@@ -1,37 +1,41 @@
 
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
-import { Avatar, Box, Button, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
+import { Avatar, Box, Button, CircularProgress, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { openAuthModal } from '../../redux/AuthSlice'
 import Swal from 'sweetalert2'
 import { followUnfollow, loadUser } from '../../Actions/User'
 
-const ListUser = ({ userId, name, avatar }) => {
+const ListUser = ({ userId, name, avatar, followers, isSearched }) => {
 
   const dispatch = useDispatch();
-  const { isAuthenticated,authorizedUser:user} = useSelector((state) => state.authStates);
-
+  const { isAuthenticated, authorizedUser: user } = useSelector((state) => state.authStates);
+  const [processing, setProcessing] = useState(false);
   const [followed, setFollowed] = useState(false)
+
+  console.log(userId)
 
   const handleFollow = async () => {
     if (isAuthenticated) {
+
+      setProcessing(true);
+      const res = await followUnfollow(userId);
+      await dispatch(loadUser(dispatch))
       
 
-      const res = await followUnfollow(userId);
-      dispatch(loadUser(dispatch))
-
       console.log(res);
-      if(res.success){
+      if (res.success) {
         Swal.fire({
-          icon:"success",
+          icon: "success",
           title: res.message + " 😃",
-          toast:true,
-          position:"bottom",
-          showConfirmButton:false,
-          timer:1500
-        }).then(()=>{
+          toast: true,
+          position: "bottom",
+          showConfirmButton: false,
+          timer: 1500
+        }).then(() => {
           setFollowed(!followed)
+          setProcessing(false);
         })
       }
 
@@ -39,7 +43,7 @@ const ListUser = ({ userId, name, avatar }) => {
     } else {
       Swal.fire({
         title: "Please Login First",
-        text : "Note: dummy login credentials are provided",
+        text: "Note: dummy login credentials are provided",
         icon: "info",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -53,45 +57,51 @@ const ListUser = ({ userId, name, avatar }) => {
     }
   }
 
-  useEffect(()=>{
-    if(user){
-      
-      user.following.map((user)=>{
-        
-        if(String(user._id) === String(userId)){
+  useEffect(() => {
+    if (user) {
+
+      user.following.map((user) => {
+
+        if (String(user?._id) === String(userId)) {
           // logged in  user follows this user
-          console.log("checking for: ", user.name , "true")
-          setFollowed(true); 
+          setFollowed(true);
         }
       })
     }
-  },[user])
+  }, [user])
 
   return (
     <>
+
       <ListItem alignItems="center" sx={{ paddingLeft: "0" }}>
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src={avatar} />
-        </ListItemAvatar>
-        <ListItemText
-          primary={name}
-        // secondary={
-        //     <React.Fragment>
-        //         <Typography
-        //             sx={{ display: 'inline' }}
-        //             component="span"
-        //             variant="body2"
-        //             color="text.primary"
-        //         >
-        //             Ali Connors
-        //         </Typography>
-        //         {" — I'll be in your neighborhood doing errands this…"}
-        //     </React.Fragment>
-        // }
-        />
-        <Button onClick={handleFollow}><Typography content='p' sx={{ textTransform: "lowercase" }}> {followed? "unfollow" : "follow"}</Typography></Button>
-      </ListItem>
-      <Divider variant="inset"  />
+        <Link to={`/profile/${userId}`} style={{display:"flex", alignItems:"center",width:"100%"}}  >
+          <ListItemAvatar>
+            <Avatar alt="Remy Sharp" src={avatar} />
+          </ListItemAvatar>
+          <ListItemText
+            primary={name}
+
+            secondary={
+              <React.Fragment>
+                <Typography
+                  sx={{ display: 'inline' }}
+                  component="span"
+                  variant="body2"
+                  color="text.primary"
+                >
+                  {followers?.length}
+                </Typography>
+                {" followers"}
+              </React.Fragment>
+            }
+          />
+        </Link>
+        {!isSearched &&
+          < Button onClick={handleFollow}><Typography content='p' sx={{ textTransform: "lowercase" }}>{processing ? <CircularProgress size={18} /> : <>{followed ? "unfollow" : "follow"}</>}</Typography></Button>
+        }
+      </ListItem >
+      <Divider variant="inset" />
+
     </>
   )
 }

@@ -3,8 +3,8 @@ import { Box, IconButton, Modal, Typography } from '@mui/material'
 import React from 'react'
 import ListUser from '../User/ListUser'
 
-const LikesModal = ({ open, setOpen, Likes }) => {
-  console.log(Likes)
+const LikesFollowersFollowingModal = ({ open, setOpen, data , title}) => {
+ 
   return (
     <Modal
       open={open}
@@ -15,11 +15,11 @@ const LikesModal = ({ open, setOpen, Likes }) => {
 
         <IconButton onClick={() => setOpen(false)} sx={{ position: "absolute", right: "0", top: "0" }}><CloseRounded /></IconButton>
         <Box sx={{ display: "flex", width: "100%", flexDirection: "column" , height:"500px"}}>
-        <Typography sx={{ fontWeight: "400", fontSize: "20px", alignSelf: "flex-start", textTransform: "none", marginBottom: "15px", alignSelf:"center" }} > Likes</Typography>
+        <Typography sx={{ fontWeight: "400", fontSize: "20px", alignSelf: "flex-start", textTransform: "none", marginBottom: "15px", alignSelf:"center" }} > {title}</Typography>
             
             {
 
-              Likes?.map((user)=>(
+              data?.map((user)=>(
                 <ListUser key={user._id} userId={user._id} name={user.name} avatar={user.avatar.url} />
               ))
             }
@@ -31,4 +31,4 @@ const LikesModal = ({ open, setOpen, Likes }) => {
   )
 }
 
-export default LikesModal
+export default LikesFollowersFollowingModal

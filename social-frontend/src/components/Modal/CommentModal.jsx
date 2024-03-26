@@ -6,7 +6,7 @@ import CommentCard from '../commentCard/CommentCard'
 import Swal from 'sweetalert2'
 import EmojiPicker from 'emoji-picker-react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addComment } from '../../Actions/post'
+import { addComment, getPostData } from '../../Actions/post'
 import { getUserFeedData } from '../../Actions/User'
 import { openAuthModal } from '../../redux/AuthSlice'
 
@@ -19,10 +19,13 @@ const CommentModal = ({open,setOpen,owner,comments,postId,postImage}) => {
     const {isAuthenticated} = useSelector((state)=>state.authStates)
     const {likeOrCommentLoading: loading} = useSelector((state)=>state.feedStates)
 
+    
+
     const handleComment = async ()=>{
         if(isAuthenticated){
             await dispatch(addComment(postId,commentText));
             await dispatch(getUserFeedData());
+            await dispatch(getPostData(postId))
             setCommentText("");
             setEmojiToggle(false);
         }

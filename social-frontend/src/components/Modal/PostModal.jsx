@@ -6,6 +6,7 @@ import Post from '../Post/Post'
 const PostModal = ({openPostModal,setOpenPostModal,postId,owner,postImage,caption,likes,comments}) => {
     return (
         <Modal open={openPostModal}
+            
             onClose={() => setOpenPostModal(!openPostModal)}
             sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Box sx={{ width: { xs: "90%", sm: "70%", md: "60%" }, height: "90%", m: "20px", background: "#f2f2f2", display: "flex" }}>
@@ -17,6 +18,9 @@ const PostModal = ({openPostModal,setOpenPostModal,postId,owner,postImage,captio
                     likes={likes}
                     comments={comments}
                 />
+
+
+                
                 
             </Box>
         </Modal>

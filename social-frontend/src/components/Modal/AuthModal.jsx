@@ -25,8 +25,6 @@ const AuthModal = () => {
   const dispatch = useDispatch();
   const { openAuthModal, authLoading: loading } = useSelector((state) => state.authStates)
 
-  console.log(openAuthModal)
-
 
   // states
   const [email, setEmail] = useState("");

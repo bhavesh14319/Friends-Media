@@ -1,24 +1,81 @@
-import { AppBar, Avatar, Box, Divider, Drawer, IconButton, LinearProgress, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
-import React from 'react'
+import { AppBar, Avatar, Box, Button, Divider, Drawer, IconButton, LinearProgress, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import MenuIcon from '@mui/icons-material/Menu';
 import { AddRounded, Home, Search, } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { openCreatePostModal } from '../../redux/createPostSlice';
+import { openAuthModal } from '../../redux/AuthSlice';
+import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
+
+
 
 
 const drawerWidth = 240;
-const navItems = [
-    <ListItem><ListItemIcon><Home /></ListItemIcon> <ListItemText primary="Home"></ListItemText> </ListItem>,
-    <ListItem><ListItemIcon><Search /></ListItemIcon> <ListItemText primary="Search"></ListItemText> </ListItem>,
-    <ListItem><ListItemIcon ><AddRounded sx={{ border: "3px solid #707070", borderRadius: "5px" }} /></ListItemIcon> <ListItemText primary="Create"></ListItemText> </ListItem>,
-    <ListItem><ListItemIcon><Avatar sx={{ height: "1em", width: "1em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem>
-];
+
 const NavBar = (props) => {
 
+    const dispatch = useDispatch();
+    const { isAuthenticated, authorizedUser: user } = useSelector((state) => state.authStates);
     const { postsLoading } = useSelector((state) => state.feedStates)
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
-    const { authorizedUser: user } = useSelector((state) => state.authStates);
+    const handleCreatePost = () => {
+        if (isAuthenticated) {
+            dispatch(openCreatePostModal())
+        } else {
+            Swal.fire({
+                title: "Please Login First",
+                text: "Note: dummy login credentials are provided",
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Login"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    dispatch(openAuthModal())
+                }
+            });
+        }
+    }
+
+
+    const handleAvatarClick = () => {
+        Swal.fire({
+            title: "Please Login First",
+            text: "Note: dummy login credentials are provided",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Login"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(openAuthModal())
+            }
+        });
+    }
+
+
+
+    const navItems = [
+        <Link to="/"> <ListItem> <ListItemIcon><Home /></ListItemIcon> <ListItemText primary="Home"></ListItemText> </ListItem></Link>,
+        <Link to="/search"> <ListItem><ListItemIcon><Search /></ListItemIcon> <ListItemText primary="Search"></ListItemText></ListItem></Link>,
+        <ListItem onClick={handleCreatePost}><ListItemIcon ><AddRounded sx={{ border: "3px solid #707070", borderRadius: "5px" }} /></ListItemIcon> <ListItemText primary="Create"></ListItemText> </ListItem>,
+
+        isAuthenticated ?
+            <Link to={`/profile/${user?._id}`}> <ListItem><ListItemIcon><Avatar sx={{ height: "1em", width: "1em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem> </Link>
+            :
+            <ListItem onClick={handleCreatePost}><ListItemIcon><Avatar sx={{ height: "1em", width: "1em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem>
+
+
+    ];
+
+
+
+
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
@@ -33,8 +90,8 @@ const NavBar = (props) => {
             <Divider />
             <List>
                 {
-                    navItems?.map((item,index) => (
-                       <React.Fragment key={index}>{item}</React.Fragment>
+                    navItems?.map((item, index) => (
+                        <React.Fragment key={index}>{item}</React.Fragment>
                     ))
                 }
 
@@ -53,7 +110,7 @@ const NavBar = (props) => {
                         onClick={handleDrawerToggle}
                         sx={{ mr: 2, display: { sm: 'none' } }}
                     >
-                        <MenuIcon />
+                        <MenuIcon sx={{ color: "black" }} />
                     </IconButton>
 
 
@@ -66,11 +123,26 @@ const NavBar = (props) => {
                         Friends Media
                     </Typography>
 
+                    {
+                        isAuthenticated? 
+                        <Typography sx={{ ml: "auto", color: "black" }}>Hello, {user ? user.name : "guest"} 👋</Typography>
+                        :
+                        <Button onClick={()=>dispatch(openAuthModal())} sx={{ml:"auto"}}>Login</Button>
+                    }
+                    
+                    {isAuthenticated ?
+                        <Link to={`/profile/${user?._id}`}>
+                            <IconButton >
+                                <Avatar src={user && user?.avatar?.url} sx={{}} />
+                            </IconButton>
+                        </Link>
 
-                    <Typography sx={{ color: "black" }}>Hello, {user ? user.name : "guest"} 👋</Typography>
-                    <IconButton sx={{ ml: "auto" }}>
-                        <Avatar src={user && user?.avatar?.url} sx={{}} />
-                    </IconButton>
+                        :
+                        <IconButton onClick={handleAvatarClick} >
+                            <Avatar src={user && user?.avatar?.url} sx={{}} />
+                        </IconButton>
+                    }
+
                 </Toolbar>
                 {postsLoading &&
                     <LinearProgress sx={{
@@ -98,6 +170,7 @@ const NavBar = (props) => {
                     {drawer}
                 </Drawer>
             </nav>
+
         </>
     )
 }

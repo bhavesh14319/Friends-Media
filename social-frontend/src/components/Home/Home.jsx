@@ -4,6 +4,7 @@ import Feed from './Feed';
 import SideBar from './SideBar';
 import RightBar from './RightBar';
 import { Box, Stack } from '@mui/material';
+import SearchDrawer from '../Search/Search';
 
 
 const Home = () => {
@@ -25,6 +26,7 @@ const Home = () => {
             <SideBar/>
             <Feed />
             <RightBar/>
+           
         </Stack>
       
     </Box>

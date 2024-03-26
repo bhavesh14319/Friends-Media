@@ -4,7 +4,7 @@ const authSlice = createSlice({
     name:"authStates",
     initialState:{
         isAuthenticated: false,
-        openAuthModal:true,
+        openAuthModal:false,
         authLoading:false,
         authorizedUser:null,
         authMessage:null
@@ -33,6 +33,7 @@ const authSlice = createSlice({
         },
         // logout success will handle logout req success
         logoutSuccess:(state,action)=>{
+            state.isAuthenticated=false;
             state.authorizedUser=null;
         }
 

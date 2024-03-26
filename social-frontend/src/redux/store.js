@@ -4,20 +4,19 @@ import {configureStore} from "@reduxjs/toolkit"
 
 import authReducers from "./AuthSlice"
 import feedReducers from "./feedSlice"
+import createPostReducers from "./createPostSlice"
+import postReducers from "./postSlice"
+import userReducers from "./userSlice"
+import commentModalReducers from "./commentModalSlice"
 
 const store = configureStore({
     reducer:{
-        // user : userReducer,
-        // postOfFollowing : followingPostsReducer,
-        // allUsers: allUserReducer,
-        // userProfile:userProfileReducer,
-        // requests:requestReducers,
-        // userPosts:userPostReducer,
-
-
         authStates:authReducers,
-        feedStates : feedReducers
-        
+        feedStates : feedReducers,
+        createPostStates: createPostReducers,
+        postStates : postReducers,
+        userStates : userReducers,
+        commentModalStates : commentModalReducers
     }
 })
 
