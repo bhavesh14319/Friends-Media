@@ -10,10 +10,12 @@ dotenv.config();
 app.use(require("cookie-parser")())
 
 
+// app.use(cors());
 
 app.use(cors({
     // origin: "https://friendsmedia.netlify.app",
-    origin:"http://localhost:3000",
+    // origin:"http://localhost:3000",
+    origin:"*",
     methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE'],
     credentials: true
 }))

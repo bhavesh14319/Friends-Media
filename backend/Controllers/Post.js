@@ -2,6 +2,36 @@ const Post = require("../models/Post")
 const User = require("../models/User")
 const cloudinary = require("cloudinary");
 
+
+const getPost  = async (req,res)=>{
+    try{
+        const id = req.params.id;
+
+        const post = await Post.findById(id).populate("owner likes comments.user");
+
+        if(!post){
+            return res.status(404).json({
+                success:false,
+                message : "post not found"
+            })  
+        }
+
+
+        return res.status(200).json({
+            success:true,
+            post:post
+        })
+
+
+
+    }catch(e){
+        res.status(500).json({
+            success:false,
+            message:e.message
+        })
+    }
+}
+
 const createPost = async (req,res)=>{
     try{
         const mycloud = await cloudinary.v2.uploader.upload(req.body.image,{
@@ -184,7 +214,8 @@ const updateCaption =  async(req,res)=>{
 
         res.status(200).json({
             success:true,
-            message: "Caption Updated"
+            message: "Caption Updated",
+            post:post
         })
 
     }catch(e){
@@ -310,4 +341,4 @@ const deleteComment = async (req, res) => {
     }
   };
 
-module.exports = {createPost,likeUnlikePost,deletePost , getFollowingPosts ,updateCaption , addComment, deleteComment}
+module.exports = {getPost,createPost,likeUnlikePost,deletePost , getFollowingPosts ,updateCaption , addComment, deleteComment}

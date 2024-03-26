@@ -90,7 +90,14 @@ const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await User.findOne({ email }).select("+password").populate("posts followers following");
+        const user = await User.findOne({ email }).select("+password").populate({
+            path: 'posts',
+            populate:[ { path: 'owner' },{path:'likes'},{path:"comments"} ]// Populate owner field in each post
+          })
+          .populate('followers')
+          .populate('following')
+    
+        
 
         if (!user) {
             return res.status(400).json({
