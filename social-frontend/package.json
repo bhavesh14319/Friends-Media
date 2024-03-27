@@ -44,5 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"http://localhost:4000/api/v1"
+  "proxy":"https://blue-enthusiastic-cobra.cyclic.app/api/v1"
 }

@@ -48,7 +48,7 @@ const Feed = () => {
       }
 
       {
-        !postsLoading && feed.length===0 && 
+        !postsLoading && feed?.length===0 && 
 
         <Typography variant='h6' textAlign={"center"}>No Posts Yet</Typography> 
 
