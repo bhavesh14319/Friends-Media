@@ -80,7 +80,7 @@ const Post = ({
 
     useEffect(() => {
         // console.log(likes);
-        if (likes.length > 0) {
+        if (likes?.length > 0) {
             likes.map((userWhoLiked) => {
                 if (String(userWhoLiked?._id) === String(user?._id)) {
                     // console.log("true")
@@ -138,7 +138,7 @@ const Post = ({
 
                         }
                         title={owner?.name}
-                        subheader={`${owner?.posts.length} Posts`} 
+                        subheader={`${owner?.posts?.length} Posts`} 
                     />
                 </Link>
                 <CardMedia
@@ -163,7 +163,7 @@ const Post = ({
                             {open ? <ChatBubble /> : <ChatBubbleOutlineRounded />}
                         </IconButton>
                     </Stack>
-                    <Button onClick={() => setOpenLikesModal(true)}><Typography sx={{ textTransform: "lowercase" }}>{likes.length}  Likes </Typography></Button>
+                    <Button onClick={() => setOpenLikesModal(true)}><Typography sx={{ textTransform: "lowercase" }}>{likes?.length}  Likes </Typography></Button>
                 </CardActions>
 
 

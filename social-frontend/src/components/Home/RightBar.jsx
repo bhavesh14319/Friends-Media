@@ -55,7 +55,7 @@ const RightBar = () => {
         <Typography variant='h6' sx={{ fontSize: "18px", fontWeight: "300" }}>Suggested for you</Typography>
 
         {usersLoading && shimmerUsers.map((user, index) => <div key={index}> {user} </div>)}
-        {!usersLoading && suggestedUsers.length === 0 &&
+        {!usersLoading && suggestedUsers?.length === 0 &&
           <Typography variant='h6' textAlign={"center"}>No Users Yet</Typography>
         }
 
@@ -72,7 +72,7 @@ const RightBar = () => {
 
         {/* lates posts image grid */}
 
-        {latestPosts.length>0 &&
+        {latestPosts?.length>0 &&
           <>
             <Typography variant='h6' sx={{ fontSize: "18px", fontWeight: "300", margin: "15px 0" }}>Latest Posts</Typography>
      
