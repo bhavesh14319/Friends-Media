@@ -62,7 +62,7 @@ const ListUser = ({ userId, name, avatar, followers, isSearched }) => {
   useEffect(() => {
     if (user) {
 
-      user.following.map((user) => {
+      user?.following?.map((user) => {
 
         if (String(user?._id) === String(userId)) {
           // logged in  user follows this user

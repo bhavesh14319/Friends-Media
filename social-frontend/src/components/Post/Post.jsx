@@ -81,7 +81,7 @@ const Post = ({
     useEffect(() => {
         // console.log(likes);
         if (likes?.length > 0) {
-            likes.map((userWhoLiked) => {
+            likes?.map((userWhoLiked) => {
                 if (String(userWhoLiked?._id) === String(user?._id)) {
                     // console.log("true")
                     setLiked(true);

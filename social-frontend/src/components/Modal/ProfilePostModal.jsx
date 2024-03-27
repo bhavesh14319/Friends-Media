@@ -100,7 +100,7 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
     useEffect(() => {
         // console.log(likes);
         if (post?.likes?.length > 0) {
-            post?.likes.map((userWhoLiked) => {
+            post?.likes?.map((userWhoLiked) => {
                 if (String(userWhoLiked?._id) === String(user?._id)) {
                     console.log("true")
                     setLiked(true);

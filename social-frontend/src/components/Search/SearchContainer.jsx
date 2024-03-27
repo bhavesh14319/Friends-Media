@@ -60,7 +60,7 @@ const SearchContainer = () => {
 
 
             {loading &&
-                shimmer.map((shimmer) => (
+                shimmer?.map((shimmer) => (
                     shimmer
                 ))
             }
@@ -71,7 +71,7 @@ const SearchContainer = () => {
             <Box sx={{ height: "100%" }}>
                 {!loading &&
                     <Stack direction="column" sx={{ width: "80%", margin: "0 auto" }}>
-                        {searchedusers.map((user) => (
+                        {searchedusers?.map((user) => (
                             <ListUser userId={user._id} name={user.name} avatar={user.avatar.url} isSearched={true} followers={user.followers} />
                         ))}
 

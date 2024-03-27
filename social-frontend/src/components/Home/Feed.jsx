@@ -40,7 +40,7 @@ const Feed = () => {
   return (
     <Box sx={{ borderRight: "1px solid #707070", marginLeft: "0px !important", padding: { xs: "1em 1em", md: "2em 1em", lg: "2em 2em" } }} flex={3} marginLeft={0}>
       {
-        postsLoading && shimmerPosts.map((post, index) => (
+        postsLoading && shimmerPosts?.map((post, index) => (
           <div key={index}>
             {post}
           </div>

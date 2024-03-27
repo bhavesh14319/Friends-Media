@@ -54,7 +54,7 @@ const RightBar = () => {
 
         <Typography variant='h6' sx={{ fontSize: "18px", fontWeight: "300" }}>Suggested for you</Typography>
 
-        {usersLoading && shimmerUsers.map((user, index) => <div key={index}> {user} </div>)}
+        {usersLoading && shimmerUsers?.map((user, index) => <div key={index}> {user} </div>)}
         {!usersLoading && suggestedUsers?.length === 0 &&
           <Typography variant='h6' textAlign={"center"}>No Users Yet</Typography>
         }
@@ -62,7 +62,7 @@ const RightBar = () => {
         {!usersLoading &&
           <List sx={{ width: "100%", height: "215px", maxHeight: "275px", overflowY: "scroll" }}  >
             {
-              suggestedUsers.map((user) => (
+              suggestedUsers?.map((user) => (
                 <ListUser key={user._id} avatar={user.avatar.url} name={user.name} userId={user._id} followers={user.followers} />
               ))
 
@@ -78,7 +78,7 @@ const RightBar = () => {
      
 
             <ImageList sx={{ minHeight: "300px" }} cols={3} gap={5}>
-              {latestPosts.map((post) => (
+              {latestPosts?.map((post) => (
 
                 <ImageListItem onClick={() => { setOpenProfilePostModal(true); setActivePostId(post._id) }} key={post._id} sx={{ minHeight: "150px", maxHeight: "150px", maxWidth: "150ox", cursor: "pointer", overflow: "hidden" }}>
                   <img
