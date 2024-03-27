@@ -11,7 +11,7 @@ import { getUserFeedData } from '../../Actions/User'
 
 
 // mui
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Stack, IconButton, Typography, Menu, MenuItem } from '@mui/material'
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Stack, IconButton, Typography } from '@mui/material'
 import { Favorite, MoreVert, ChatBubbleOutlineRounded, ChatBubble } from '@mui/icons-material'
 import Swal from 'sweetalert2'
 import { openAuthModal } from '../../redux/AuthSlice'
@@ -27,10 +27,7 @@ const Post = ({
     postImage,
     likes,
     comments,
-    owner,
-    isDelete = false,
-    isAccount = false,
-    page
+    owner
 }) => {
 
     const { isAuthenticated, authorizedUser: user } = useSelector((state) => state.authStates)
@@ -128,10 +125,10 @@ const Post = ({
 
         <>
             <Card sx={{ marginBottom: "20px", marginLeft: "0" }}>
-                <Link to={`/profile/${owner._id}`}>
+                <Link to={`/profile/${owner?._id}`}>
                     <CardHeader
                         avatar={
-                            <Avatar sx={{}} aria-label="recipe" src={owner.avatar.url} />
+                            <Avatar sx={{}} aria-label="recipe" src={owner?.avatar.url} />
                         }
                         action={
                             user?._id === owner?._id &&
@@ -140,8 +137,8 @@ const Post = ({
                             </IconButton>
 
                         }
-                        title={owner.name}
-                        subheader="September 14, 2016"
+                        title={owner?.name}
+                        subheader={`${owner?.posts.length} Posts`} 
                     />
                 </Link>
                 <CardMedia
@@ -153,7 +150,7 @@ const Post = ({
                 />
 
                 <CardContent>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" fontSize={"18px"} >
                         {caption}
                     </Typography>
                 </CardContent>

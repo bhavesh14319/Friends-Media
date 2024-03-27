@@ -1,4 +1,4 @@
-import { Box, CardHeader, Divider, IconButton, InputAdornment, Skeleton, Stack, TextField, Typography } from '@mui/material'
+import { Box, Divider, IconButton, Stack, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ListUser from '../User/ListUser'
 import { searchUsers } from '../../Actions/User';
@@ -26,7 +26,7 @@ const SearchContainer = () => {
     const [loading, setLoading] = useState(false);
 
     const handleSearch = async () => {
-        if (searchText != "") {
+        if (searchText !== "") {
             setLoading(true);
             let res = await searchUsers(searchText);
             if (res.success) {

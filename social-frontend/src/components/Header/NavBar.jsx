@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Box, Button, Divider, Drawer, IconButton, LinearProgress, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import MenuIcon from '@mui/icons-material/Menu';
 import { AddRounded, Home, Search, } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,7 +66,7 @@ const NavBar = (props) => {
         <ListItem onClick={handleCreatePost}><ListItemIcon ><AddRounded sx={{ border: "3px solid #707070", borderRadius: "5px" }} /></ListItemIcon> <ListItemText primary="Create"></ListItemText> </ListItem>,
 
         isAuthenticated ?
-            <Link to={`/profile/${user?._id}`}> <ListItem><ListItemIcon><Avatar sx={{ height: "1em", width: "1em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem> </Link>
+            <Link to={`/profile/`}> <ListItem><ListItemIcon><Avatar sx={{ height: "1em", width: "1em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem> </Link>
             :
             <ListItem onClick={handleCreatePost}><ListItemIcon><Avatar sx={{ height: "1em", width: "1em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem>
 
@@ -131,7 +131,7 @@ const NavBar = (props) => {
                     }
                     
                     {isAuthenticated ?
-                        <Link to={`/profile/${user?._id}`}>
+                        <Link to={`/profile/`}>
                             <IconButton >
                                 <Avatar src={user && user?.avatar?.url} sx={{}} />
                             </IconButton>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Post from '../Post/Post'
 import { getFeedData, getUserFeedData } from '../../Actions/User'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import PostShimmer from '../Shimmer/PostShimmer'
 
 let shimmerPosts = [
@@ -45,6 +45,13 @@ const Feed = () => {
             {post}
           </div>
         ))
+      }
+
+      {
+        !postsLoading && feed.length===0 && 
+
+        <Typography variant='h6' textAlign={"center"}>No Posts Yet</Typography> 
+
       }
 
       {!postsLoading && feed?.map((feedItem) => (

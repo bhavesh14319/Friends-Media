@@ -15,7 +15,7 @@ const LikesFollowersFollowingModal = ({ open, setOpen, data , title}) => {
 
         <IconButton onClick={() => setOpen(false)} sx={{ position: "absolute", right: "0", top: "0" }}><CloseRounded /></IconButton>
         <Box sx={{ display: "flex", width: "100%", flexDirection: "column" , height:"500px"}}>
-        <Typography sx={{ fontWeight: "400", fontSize: "20px", alignSelf: "flex-start", textTransform: "none", marginBottom: "15px", alignSelf:"center" }} > {title}</Typography>
+        <Typography sx={{ fontWeight: "400", fontSize: "20px", textTransform: "none", marginBottom: "15px", alignSelf:"center" }} > {title}</Typography>
             
             {
 

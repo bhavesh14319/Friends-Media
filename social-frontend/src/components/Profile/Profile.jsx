@@ -5,8 +5,8 @@ import ProfileContainer from './ProfileContainer'
 
 const Profile = () => {
   return (
-    <Box>
-      <Stack direction="row" spacing={2} justifyContent="space-between">
+    <Box >
+      <Stack sx={{height:"100vh", minHeight:"100vh" }} direction="row" spacing={2} justifyContent="space-between">
         <SideBar />
         <ProfileContainer/>
       </Stack>

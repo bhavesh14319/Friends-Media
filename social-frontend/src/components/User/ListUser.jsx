@@ -1,11 +1,11 @@
 
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
-import { Avatar, Box, Button, CircularProgress, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
+import { Avatar, Button, CircularProgress, Divider, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { openAuthModal } from '../../redux/AuthSlice'
 import Swal from 'sweetalert2'
-import { followUnfollow, loadUser } from '../../Actions/User'
+import { followUnfollow, getSuggestedUsersData, loadUser } from '../../Actions/User'
 
 const ListUser = ({ userId, name, avatar, followers, isSearched }) => {
 
@@ -14,17 +14,19 @@ const ListUser = ({ userId, name, avatar, followers, isSearched }) => {
   const [processing, setProcessing] = useState(false);
   const [followed, setFollowed] = useState(false)
 
-  console.log(userId)
+  const isAccount = String(userId)===String(user?._id)
 
+ 
   const handleFollow = async () => {
     if (isAuthenticated) {
 
       setProcessing(true);
       const res = await followUnfollow(userId);
       await dispatch(loadUser(dispatch))
+      await dispatch(getSuggestedUsersData())
       
 
-      console.log(res);
+  
       if (res.success) {
         Swal.fire({
           icon: "success",
@@ -66,9 +68,10 @@ const ListUser = ({ userId, name, avatar, followers, isSearched }) => {
           // logged in  user follows this user
           setFollowed(true);
         }
+        return ""
       })
     }
-  }, [user])
+  }, [user,userId])
 
   return (
     <>
@@ -96,7 +99,7 @@ const ListUser = ({ userId, name, avatar, followers, isSearched }) => {
             }
           />
         </Link>
-        {!isSearched &&
+        {!isSearched && !isAccount &&
           < Button onClick={handleFollow}><Typography content='p' sx={{ textTransform: "lowercase" }}>{processing ? <CircularProgress size={18} /> : <>{followed ? "unfollow" : "follow"}</>}</Typography></Button>
         }
       </ListItem >

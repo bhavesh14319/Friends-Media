@@ -1,20 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { AddRounded, Home, Search } from '@mui/icons-material';
 import { Avatar, Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { openCreatePostModal } from '../../redux/createPostSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { openAuthModal } from '../../redux/AuthSlice';
-import SearchDrawer from '../Search/Search';
 import { Link } from 'react-router-dom';
 
 const SideBar = () => {
   const dispatch = useDispatch();
 
-  const { isAuthenticated,authorizedUser:user } = useSelector((state) => state.authStates);
+  const { isAuthenticated } = useSelector((state) => state.authStates);
 
-  const [searchAnchor, setSearchAnchor] = useState();
-  const [openSearch, setOpenSearch] = useState(false);
 
   const handleCreatePost = () => {
     if (isAuthenticated) {
@@ -59,7 +56,7 @@ const SideBar = () => {
 
 
   return (
-    <Box sx={{ display: { xs: "none", sm: "flex" }, borderRight: "1px solid #707070" }} flex={1} p={2} >
+    <Box sx={{ minHeight:"100vh", display: { xs: "none", sm: "flex" }, borderRight: "1px solid #707070" }} flex={1} p={2} >
       <Box position="fixed" >
         <List>
           <ListItem disablePadding>
@@ -104,7 +101,7 @@ const SideBar = () => {
                 </ListItemButton>
             ):
             (
-              <Link to={`/profile/${user._id}`} >
+              <Link to={`/profile`} >
                 <ListItemButton >
                   <ListItemIcon sx={{ minWidth: "50px" }}>
                     <Avatar sx={{ height: "1em", width: "1em" }} />

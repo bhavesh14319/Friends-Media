@@ -1,13 +1,12 @@
 import axios from "axios"
-import {BASE_URL} from "../utils/constants"
 import { authFailure, authRequest, authSuccess, logoutSuccess } from "../redux/AuthSlice"
 import { latestPostsSuccess, postsSuccess, requestFailure, startPostsLoading, stopPostsLoading, suggestedUsersRequest, suggestedUsersSuccess } from "../redux/feedSlice"
 import { userFailure, userRequest, userSuccess } from "../redux/userSlice"
-let url=BASE_URL
 
-export const loginUser = async (email, password)=> {
+
+export const loginUser = async (email, password) => {
     try {
- 
+
         const res = await axios.post("/login", { email, password }, {
             headers: {
                 "Content-Type": "application/json",
@@ -19,18 +18,18 @@ export const loginUser = async (email, password)=> {
         localStorage.setItem("token", res.data.token);
         return res.data
 
-      
+
 
     } catch (e) {
         console.log(e.response);
         return e.response
-  
+
     }
 }
 
 
 
-export const registerUser = async (name, email, password, image)  => {
+export const registerUser = async (name, email, password, image) => {
     try {
 
         const res = await axios.post("/register", { name, email, password, image }, {
@@ -41,11 +40,10 @@ export const registerUser = async (name, email, password, image)  => {
             withCredentials: true
         })
 
+
         localStorage.setItem("token", res.data.token);
 
-  
 
-        console.log(res);
         return res.data
 
     } catch (e) {
@@ -54,9 +52,9 @@ export const registerUser = async (name, email, password, image)  => {
 }
 
 
-export const loadUser = (id)=> async (dispatch) =>  {
+export const loadUser = (id) => async (dispatch) => {
     try {
-        
+
         dispatch(authRequest());
 
         const res = await axios.get("/user", {
@@ -79,7 +77,7 @@ export const loadUser = (id)=> async (dispatch) =>  {
 }
 
 
-export const logoutUser =()=> async (dispatch) => {
+export const logoutUser = () => async (dispatch) => {
     try {
 
         dispatch(authRequest());
@@ -104,10 +102,10 @@ export const logoutUser =()=> async (dispatch) => {
     }
 }
 
-export const getFollowingPost =async () => {
+export const getFollowingPost = async () => {
     try {
 
-    
+
         const { data } = await axios.get("/getFollowingPosts", {
             headers: {
                 "Content-Type": "application/json",
@@ -120,14 +118,14 @@ export const getFollowingPost =async () => {
 
         return data
 
-   
+
 
     } catch (e) {
         return e.response
     }
 }
 
-export const getSuggestedUsersData =(name = "")=> async (dispatch) => {
+export const getSuggestedUsersData = (name = "") => async (dispatch) => {
     try {
 
         dispatch(suggestedUsersRequest())
@@ -149,14 +147,14 @@ export const getSuggestedUsersData =(name = "")=> async (dispatch) => {
 }
 
 
-export const getAllUsers =(name = "")=> async (dispatch) => {
+export const getAllUsers = (name = "") => async (dispatch) => {
     try {
-        
+
         dispatch(suggestedUsersRequest());
         const res = await axios.get(`/users?name=${name}`)
         // console.log(res.data)
         dispatch(suggestedUsersSuccess(res.data.users))
-     
+
     } catch (e) {
         dispatch(requestFailure(e.response.data.message))
         console.log(e.response)
@@ -164,24 +162,24 @@ export const getAllUsers =(name = "")=> async (dispatch) => {
 }
 
 
-export const searchUsers =async (name)=>{
+export const searchUsers = async (name) => {
     try {
 
         const res = await axios.get(`/users?name=${name}`)
         // console.log(res.data)
         return res.data;
-     
+
     } catch (e) {
         return e.response;
     }
 }
 
 
-export const getMyPost =async () => {
+export const getMyPost = async () => {
     try {
 
 
-        const res= await axios.get("/user/posts", {
+        const res = await axios.get("/user/posts", {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -191,7 +189,7 @@ export const getMyPost =async () => {
 
         return res.data
 
-   
+
 
     } catch (e) {
         return e.response
@@ -259,12 +257,10 @@ export const updatePassword = (oldPassword, newPassword) => async (dispatch) => 
     }
 }
 
-export const deleteProfile = () => async (dispatch) => {
+export const deleteProfile = async () => {
     try {
 
-        dispatch({
-            type: "deleteProfileRequest"
-        })
+     
 
         const res = await axios.delete("/delete/me", {
             headers: {
@@ -274,20 +270,21 @@ export const deleteProfile = () => async (dispatch) => {
             },
             withCredentials: true
         })
-        console.log(res);
 
-        dispatch({
-            type: "deleteProfileSuccess",
-            payload: res.data
-        })
+
+        localStorage.removeItem("token")
+      
+        return res.data;
+
+
 
 
 
     } catch (e) {
-        dispatch({
-            type: "deleteProfileFailure",
-            payload: e.response.data.message
-        })
+        
+        return e.response
+
+
     }
 
 }
@@ -298,7 +295,7 @@ export const forgotPassword = (email) => async (dispatch) => {
             type: "forgotPasswordRequest"
         })
 
-        const { data } = await axios.post( "/forgot/password", { email }, {
+        const { data } = await axios.post("/forgot/password", { email }, {
 
             headers: {
                 "Content-Type": "application/json",
@@ -356,10 +353,10 @@ export const resetPassword = (token, password) => async (dispatch) => {
 
 
 
-export const getUserPosts =async (id) => {
+export const getUserPosts = async (id) => {
     try {
 
-  
+
         const res = await axios.get(`/user/posts/${id}`, {
             headers: {
                 "Content-Type": "application/json",
@@ -371,16 +368,16 @@ export const getUserPosts =async (id) => {
         return res.data
 
     } catch (e) {
-       
+
         return e.response;
     }
 }
 
 
-export const getUserProfile = (id)=> async(dispatch) => {
+export const getUserProfile = (id) => async (dispatch) => {
     try {
         dispatch(userRequest());
-        const res = await axios.get( `/user/${id}`, {
+        const res = await axios.get(`/user/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -400,11 +397,11 @@ export const getUserProfile = (id)=> async(dispatch) => {
 
 
 
-export const followUnfollow = async (id) =>  {
+export const followUnfollow = async (id) => {
     try {
 
 
-        const res= await axios.get(`/follow/${id}`, {
+        const res = await axios.get(`/follow/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -418,35 +415,35 @@ export const followUnfollow = async (id) =>  {
 
 
     } catch (e) {
-        
+
         return e.response
     }
 }
 
 
-export const getFeedData =()=> async(dispatch)=>{
-    try{
+export const getFeedData = () => async (dispatch) => {
+    try {
         dispatch(startPostsLoading())
         const res = await axios.get("/getFeedData");
-       
+
         // console.log(res.data);
         dispatch(postsSuccess(res.data.posts))
         dispatch(stopPostsLoading());
 
-    }catch(e){
+    } catch (e) {
         console.log(e.response)
         dispatch(requestFailure(e.response.data.message))
     }
 }
 
 
-export const getUserFeedData = ()=> async(dispatch)=>{
-    try{
+export const getUserFeedData = () => async (dispatch) => {
+    try {
 
         dispatch(startPostsLoading())
-        const res = await axios.get("/getUserFeed",{
-            headers:{
-                Authorization:`Bearer ${localStorage.getItem('token')}`
+        const res = await axios.get("/getUserFeed", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
 
@@ -454,22 +451,22 @@ export const getUserFeedData = ()=> async(dispatch)=>{
         dispatch(postsSuccess(res.data.posts))
         dispatch(stopPostsLoading());
 
-    }catch(e){
+    } catch (e) {
 
         dispatch(requestFailure(e.response.data.message))
     }
 }
 
 
-export const getLatestPosts =()=> async(dispatch)=>{
-    try{
+export const getLatestPosts = () => async (dispatch) => {
+    try {
 
         const res = await axios.get("/getLatestPosts");
 
         dispatch(latestPostsSuccess(res.data.posts))
         return res.data;
 
-    }catch(e){
+    } catch (e) {
         return e.response
     }
 }

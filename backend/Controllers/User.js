@@ -59,7 +59,7 @@ const registerUser = async (req, res) => {
             },
         })
 
-        const token = await generateToken();
+        const token = await generateToken(user._id);
         res.status(200).cookie("token", token, {
             expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
             httpOnly: true,
@@ -407,7 +407,8 @@ const deleteUser = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "User deleted"
+            message: "User deleted",
+            user:null
         })
 
     } catch (e) {
@@ -421,8 +422,8 @@ const deleteUser = async (req, res) => {
 
 const myProfile = async (req, res) => {
     try {
-        //console.log(req.user);
-        const user = await User.findById(req.user._id).populate("posts followers following");
+        // console.log(req.user)
+        const user = await User.findById(req.user?._id).populate("posts followers following");
 
         const token = await generateToken(user._id);       
         res.status(200).cookie("token", token, {

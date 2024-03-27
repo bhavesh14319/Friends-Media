@@ -1,15 +1,13 @@
 
 
-import { CloseRounded, CloudUpload, Mood } from '@mui/icons-material'
-import { Box, Button, CircularProgress, IconButton, Modal, TextField, Typography, Popper } from '@mui/material'
+import { CloseRounded, Mood } from '@mui/icons-material'
+import { Box, Button, CircularProgress, IconButton, Modal, Typography, Popper } from '@mui/material'
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base';
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, {  useState } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from '@emotion/styled'
-import { loadUser } from '../../Actions/User';
-import { createPost, getPostData, updatePost } from '../../Actions/post';
-import { clearMessage, clearError, closeCreatePostModal } from '../../redux/createPostSlice';
-import Swal from 'sweetalert2';
+import { getPostData, updatePost } from '../../Actions/post';
+import {  closeCreatePostModal } from '../../redux/createPostSlice';
 import EmojiPicker from 'emoji-picker-react'
 
 const blue = {
@@ -21,18 +19,6 @@ const blue = {
     900: '#003A75',
 };
 
-const grey = {
-    50: '#F3F6F9',
-    100: '#E5EAF2',
-    200: '#DAE2ED',
-    300: '#C7D0DD',
-    400: '#B0B8C4',
-    500: '#9DA8B7',
-    600: '#6B7A90',
-    700: '#434D5B',
-    800: '#303740',
-    900: '#1C2025',
-};
 
 const Textarea = styled(BaseTextareaAutosize)(
     ({ theme }) => `
@@ -63,17 +49,17 @@ const Textarea = styled(BaseTextareaAutosize)(
 );
 
 
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-});
+// const VisuallyHiddenInput = styled('input')({
+//     clip: 'rect(0 0 0 0)',
+//     clipPath: 'inset(50%)',
+//     height: 1,
+//     overflow: 'hidden',
+//     position: 'absolute',
+//     bottom: 0,
+//     left: 0,
+//     whiteSpace: 'nowrap',
+//     width: 1,
+// });
 
 const UpdatePostModal = ({postId,openUpdatePostModal, setOpenUpdatePostModal}) => {
     const dispatch = useDispatch();
@@ -81,28 +67,28 @@ const UpdatePostModal = ({postId,openUpdatePostModal, setOpenUpdatePostModal}) =
     const [emojiToggle, setEmojiToggle] = useState(false);
     const [emojiAnchor, setEmojiAnchor] = useState();
 
-    const [image, setImage] = useState("https://www.eclosio.ong/wp-content/uploads/2018/08/default.png");
+    // const [image, setImage] = useState("https://www.eclosio.ong/wp-content/uploads/2018/08/default.png");
 
     const [caption, setCaption] = useState("");
 
     const [loading, setLoading] = useState(false)
 
-    const handleImageChange = (e) => {
-        console.log(e.target.files)
-        if (e.target.files.length) {
-            const file = e.target.files[0];
-            const Reader = new FileReader();
+    // const handleImageChange = (e) => {
+    //     console.log(e.target.files)
+    //     if (e.target.files.length) {
+    //         const file = e.target.files[0];
+    //         const Reader = new FileReader();
 
-            Reader.readAsDataURL(file);
-            Reader.onload = (e) => {
-                if (Reader.readyState === 2) {
-                    // console.log(Reader.result);
-                    setImage(Reader.result);
-                }
-            }
-        }
+    //         Reader.readAsDataURL(file);
+    //         Reader.onload = (e) => {
+    //             if (Reader.readyState === 2) {
+    //                 // console.log(Reader.result);
+    //                 setImage(Reader.result);
+    //             }
+    //         }
+    //     }
 
-    }
+    // }
 
     const handleUpdate = async (e) => {
 
@@ -118,7 +104,7 @@ const UpdatePostModal = ({postId,openUpdatePostModal, setOpenUpdatePostModal}) =
 
 
     
-       setImage("https://www.eclosio.ong/wp-content/uploads/2018/08/default.png")
+    //    setImage("https://www.eclosio.ong/wp-content/uploads/2018/08/default.png")
        setCaption("")
 
 

@@ -1,7 +1,7 @@
 
 
 import { CloseRounded, CloudUpload, Mood } from '@mui/icons-material'
-import { Box, Button, CircularProgress, IconButton, Modal, TextField, Typography, Popper } from '@mui/material'
+import { Box, Button, CircularProgress, IconButton, Modal, Typography, Popper } from '@mui/material'
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,18 +21,7 @@ const blue = {
     900: '#003A75',
 };
 
-const grey = {
-    50: '#F3F6F9',
-    100: '#E5EAF2',
-    200: '#DAE2ED',
-    300: '#C7D0DD',
-    400: '#B0B8C4',
-    500: '#9DA8B7',
-    600: '#6B7A90',
-    700: '#434D5B',
-    800: '#303740',
-    900: '#1C2025',
-};
+
 
 const Textarea = styled(BaseTextareaAutosize)(
     ({ theme }) => `
@@ -168,7 +157,7 @@ const CreatePostModal = () => {
 
                     <Typography sx={{ fontWeight: "400", fontSize:{xs:"25px",md:"30px"}, alignSelf: "center", textTransform: "none", marginBottom: "15px" }} > Create Post</Typography>
 
-                    <img src={image} style={{ width: "100%", maxHeight: "300px", alignSelf: "center", objectFit: "contain" }} />
+                    <img src={image}  alt="postimage" style={{ width: "100%", maxHeight: "300px", alignSelf: "center", objectFit: "contain" }} />
 
                     <Button
                         component="label"

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Post from '../Post/Post'
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, ListItemIcon, Menu, MenuItem, Modal, Stack, Typography } from '@mui/material'
 import { ChatBubble, ChatBubbleOutlineRounded, Delete, Favorite, MoreVert } from '@mui/icons-material'
 import Swal from 'sweetalert2'
@@ -9,15 +8,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openAuthModal } from '../../redux/AuthSlice'
 import { clearError, clearMessage } from '../../redux/feedSlice'
 import CommentModal from './CommentModal'
-import LikesModal from './LikesFollowersFollowingModal'
 import PostShimmer from '../Shimmer/PostShimmer'
 import LikesFollowersFollowingModal from './LikesFollowersFollowingModal'
 import UpdateIcon from '@mui/icons-material/Update';
 import UpdatePostModal from './UpdatePostModal'
+import { Link } from 'react-router-dom'
 
 const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postId }) => {
 
-    console.log(postId);
+
     const { loading, post } = useSelector((state) => state.postStates);
 
     const [liked, setLiked] = useState(false);
@@ -27,22 +26,20 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
 
     const { message, error } = useSelector((state) => state.feedStates)
     const { isAuthenticated, authorizedUser: user } = useSelector((state) => state.authStates)
-    const [menuAnchor,setMenuAnchor] = useState();
-    const [openMenu , setOpenMenu] = useState(false);
+    const [menuAnchor, setMenuAnchor] = useState();
+    const [openMenu, setOpenMenu] = useState(false);
+
+    const [processing, setProcessing] = useState(false);
     const dispatch = useDispatch();
 
 
 
-    const getPost = async () => {
 
-        dispatch(getPostData(postId));
-
-    }
 
     useEffect(() => {
-        getPost();
+        dispatch(getPostData(postId));
 
-    }, [postId])
+    }, [dispatch,postId])
 
 
     const handleLike = async () => {
@@ -72,7 +69,7 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
     }
 
 
-    const handleMenuClick = (e)=>{
+    const handleMenuClick = (e) => {
         setMenuAnchor(e.target)
         setOpenMenu(!openMenu);
 
@@ -84,16 +81,18 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
     };
 
 
-    const handleUpdatePost = ()=>{
+    const handleUpdatePost = () => {
         setOpenMenu(!openMenu)
         setOpenUpdatePostModal(true)
     }
 
-    const handleDelete = async()=>{
-       await dispatch(deletePost(postId));
-       await dispatch(loadUser())
-       setOpenMenu(!openMenu);
-       setOpenProfilePostModal(!openProfilePostModal)
+    const handleDelete = async () => {
+        setProcessing(true);
+        await dispatch(deletePost(postId));
+        await dispatch(loadUser())
+        setOpenMenu(!openMenu);
+        setOpenProfilePostModal(!openProfilePostModal)
+        setProcessing(false);
     }
 
 
@@ -152,17 +151,18 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
             >
                 {loading ?
                     (
-                        <Box sx={{ minWidth: {xs:  "90%", sm:"50%" },  display: "flex" }}>
-                           <PostShimmer />
+                        <Box sx={{ minWidth: { xs: "90%", sm: "50%" }, display: "flex" }}>
+                            <PostShimmer />
                         </Box>
                     )
                     :
                     (
-                        <Box sx={{ minWidth: {xs:  "90%", sm:"50%" }, m: "20px",  display: "flex" }}>
+                        <Box sx={{ minWidth: { xs: "90%", sm: "50%" }, m: "20px", display: "flex" }}>
                             <Card sx={{ width: "100%", marginBottom: "20px", marginLeft: "0" }}>
+                            <Link to={`/profile/${post?.owner?._id}`}>
                                 <CardHeader
                                     avatar={
-                                        <Avatar sx={{}} aria-label="recipe" src={post?.owner?.avatar.url} />
+                                      <Avatar sx={{}} aria-label="recipe" src={post?.owner?.avatar.url} /> 
                                     }
                                     action={
                                         user?._id === post?.owner?._id &&
@@ -174,6 +174,7 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
                                     title={post?.owner?.name}
                                     subheader="September 14, 2016"
                                 />
+                                </Link> 
                                 <CardMedia
                                     component="img"
                                     height=""
@@ -183,7 +184,7 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
                                 />
 
                                 <CardContent>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" color="text.secondary" fontSize={"18px"}>
                                         {post?.caption}
                                     </Typography>
                                 </CardContent>
@@ -219,13 +220,24 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
                 id="basic-menu"
                 anchorEl={menuAnchor}
                 open={openMenu}
-                onClose={()=>setOpenMenu(false)}
+                onClose={() => setOpenMenu(false)}
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem onClick={handleDelete} > Delete Post <ListItemIcon sx={{marginLeft:"15px"}}><Delete/> </ListItemIcon></MenuItem>
-                <MenuItem  onClick={handleUpdatePost} >Update Post <ListItemIcon sx={{marginLeft:"10px"}}> <UpdateIcon /> </ListItemIcon></MenuItem>
+                <MenuItem onClick={handleDelete} >
+
+                    {processing ? "Deleting..."
+
+                        :
+                        <>
+                        Delete Post 
+                        <ListItemIcon sx={{ marginLeft: "15px" }}> <Delete /> </ListItemIcon>
+                        </>
+                        
+                    }</MenuItem>
+
+                <MenuItem onClick={handleUpdatePost} >Update Post <ListItemIcon sx={{ marginLeft: "10px" }}> <UpdateIcon /> </ListItemIcon></MenuItem>
             </Menu>
             {post &&
 
@@ -234,7 +246,7 @@ const ProfilePostModal = ({ openProfilePostModal, setOpenProfilePostModal, postI
                     <UpdatePostModal
                         postId={post?._id}
                         openUpdatePostModal={openUpdatePostModal}
-                        setOpenUpdatePostModal={setOpenUpdatePostModal}    
+                        setOpenUpdatePostModal={setOpenUpdatePostModal}
 
                     />
 

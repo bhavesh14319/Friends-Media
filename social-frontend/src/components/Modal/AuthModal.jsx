@@ -1,5 +1,5 @@
-import { CloudUpload } from '@mui/icons-material';
-import { Avatar, Box, Button, IconButton, Modal, TextField, Typography, CircularProgress } from '@mui/material'
+import { CloudUpload, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Avatar, Box, Button, IconButton, Modal, TextField, Typography, CircularProgress, InputAdornment, OutlinedInput } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CloseRounded } from '@mui/icons-material';
@@ -34,12 +34,38 @@ const AuthModal = () => {
 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+
+
+  const handleClickShowPassword =()=>{
+    setShowPassword(!showPassword)
+  }
+
+  const handleShowRegistrationForm = ()=>{
+     setShowPassword(false);
+     setEmail("");
+     setPassword("");
+     setImage("");
+     setName("");
+     setShowRegisterForm(true)
+  }
+
+
+  const handleShowLoginForm = ()=>{
+    setShowPassword(false);
+    setEmail("");
+    setPassword("");
+    setImage("");
+    setName("");
+    setShowRegisterForm(false)
+ }
+
   const handleLogin = async (e) => {
 
     e.preventDefault();
     dispatch(authRequest());
 
-    setTimeout(async () => {
+
 
       const res = await loginUser(email, password)
       console.log(res);
@@ -53,14 +79,22 @@ const AuthModal = () => {
           showConfirmButton: false,
           timer: 1500
         }).then(() => {
+          handleShowLoginForm();
           dispatch(closeAuthModal())
         })
 
       } else {
-        dispatch(authFailure(res.data.message))
-      }
-    }, 2000);
 
+        dispatch(authFailure(res.data.message))
+        Swal.fire({
+          icon: "error",
+          title: `${res.data.message}`,
+          toast: true,
+          position: "bottom",
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
 
 
   }
@@ -72,9 +106,14 @@ const AuthModal = () => {
 
     dispatch(authRequest())
 
-    setTimeout(async () => {
+
       const res = await registerUser(name, email, password, image)
       console.log(res);
+
+      console.log(localStorage.getItem("token"))
+      console.log(res.token)
+
+      console.log(String(localStorage.getItem("token"))===String(res.token))
       if (res.success) {
         dispatch(authSuccess(res.user))
         Swal.fire({
@@ -85,13 +124,22 @@ const AuthModal = () => {
           showConfirmButton: false,
           timer: 1500
         }).then(() => {
+          handleShowLoginForm();
           dispatch(closeAuthModal())
         })
 
       } else {
         dispatch(authFailure(res.data.message))
+        Swal.fire({
+          icon: "error",
+          title: `${res?.data?.message}`,
+          toast: true,
+          position: "bottom",
+          showConfirmButton: false,
+          timer: 1500
+        })
       }
-    }, 2000);
+
 
   }
 
@@ -136,14 +184,34 @@ const AuthModal = () => {
           <Typography sx={{ fontWeight: "400", fontSize: "30px", alignSelf: "flex-start", textTransform: "none", marginBottom: "15px" }} > Sign In </Typography>
           <Typography>Email</Typography>
 
-          <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth sx={{ marginTop: "10px", marginBottom: "15px" }} id="fullWidth" required placeholder='Enter your email address' inputProps={{ style: { padding: "10px" } }} />
+          <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth sx={{ marginTop: "10px", marginBottom: "15px" }}  required placeholder='Enter your email address' inputProps={{ style: { padding: "10px" } }} />
 
           <Typography>Password</Typography>
-          <TextField fullWidth value={password} onChange={(e) => setPassword(e.target.value)} sx={{ marginTop: "10px", marginBottom: "30px" }} id="fullWidth" required placeholder='Enter your password' inputProps={{ style: { padding: "10px" } }} />
+
+          <OutlinedInput
+            fullWidth
+            inputProps={{ style: { padding: "10px" } }}
+            sx={{ marginTop: "10px", marginBottom: "15px",background:"none" }}
+            placeholder='password'
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
 
           <Button type='submit' disabled={loading} variant="contained" sx={{ width: "100px", alignSelf: "center" }}><Typography sx={{ textTransform: "none", display: "flex", alignItems: "center" }}>{loading ? <CircularProgress sx={{ padding: "3px 0", color: "#f2f2f2" }} size={18} thickness={5} /> : "Login"}</Typography></Button>
 
-          <Button onClick={() => setShowRegisterForm(true)} sx={{ margin: "10px 0", alignSelf: "flex-start" }} ><Typography sx={{ textTransform: "none" }}>Don't have account? Sign Up</Typography></Button>
+          <Button onClick={handleShowRegistrationForm} sx={{ margin: "10px 0", alignSelf: "flex-start" }} ><Typography sx={{ textTransform: "none" }}>Don't have account? Sign Up</Typography></Button>
         </Box>
 
 
@@ -166,17 +234,36 @@ const AuthModal = () => {
           </Button>
 
           <Typography>Name</Typography>
-          <TextField value={name} onChange={(e) => setName(e.target.value)} fullWidth sx={{ marginTop: "10px", marginBottom: "15px" }} id="fullWidth" required placeholder='Enter your name' inputProps={{ style: { padding: "10px" } }} />
+          <TextField value={name} onChange={(e) => setName(e.target.value)} fullWidth sx={{ marginTop: "10px", marginBottom: "15px" }}  required placeholder='Enter your name' inputProps={{ style: { padding: "10px" } }} />
 
           <Typography>Email</Typography>
-          <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth sx={{ marginTop: "10px", marginBottom: "15px" }} id="fullWidth" required placeholder='Enter your email address' inputProps={{ style: { padding: "10px" } }} />
+          <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth sx={{ marginTop: "10px", marginBottom: "15px" }} required placeholder='Enter your email address' inputProps={{ style: { padding: "10px" } }} />
 
           <Typography>Password</Typography>
-          <TextField fullWidth value={password} onChange={(e) => setPassword(e.target.value)} sx={{ marginTop: "10px", marginBottom: "30px" }} id="fullWidth" required placeholder='Enter your password' inputProps={{ style: { padding: "10px" } }} />
+          <OutlinedInput
+            fullWidth
+            inputProps={{ style: { padding: "10px" } }}
+            sx={{ marginTop: "10px", marginBottom: "15px",background:"none" }}
+            placeholder='password'
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
 
           <Button type='submit' disabled={loading} variant="contained" sx={{ width: "100px", alignSelf: "center" }}><Typography sx={{ textTransform: "none" }}>{loading ? <CircularProgress sx={{ padding: "3px 0", color: "#f2f2f2" }} size={18} thickness={5} /> : "Sign Up"}</Typography></Button>
 
-          <Button onClick={()=>setShowRegisterForm(false)} sx={{ margin: "10px 0", alignSelf: "flex-start" }} ><Typography sx={{ textTransform: "none" }}>Already have account? Sign In</Typography></Button>
+          <Button onClick={handleShowLoginForm} sx={{ margin: "10px 0", alignSelf: "flex-start" }} ><Typography sx={{ textTransform: "none" }}>Already have account? Sign In</Typography></Button>
         </form>
 
       </Box>

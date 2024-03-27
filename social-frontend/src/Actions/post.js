@@ -1,11 +1,8 @@
 import axios from "axios";
-import { BASE_URL } from "../utils/constants"
+
 import { requestFailure, likeOrCommentSuccess, startLikeOrCommentLoading, stopLikeOrCommentLoading } from "../redux/feedSlice";
 import { createPostFailure, createPostRequest, createPostSuccess } from "../redux/createPostSlice";
 import { postFailure, postRequest, postSuccess } from "../redux/postSlice";
-
-let url = BASE_URL;
-
 
 
 export const getPostData = (id)=> async (dispatch)=>{
@@ -123,6 +120,7 @@ export const createPost = (caption, image)=> async (dispatch) => {
         return res.data
 
     } catch (e) {
+        dispatch(createPostFailure(e.response.data.message))
         dispatch(requestFailure(e.response.data.message))
         return e.response
     }

@@ -1,6 +1,4 @@
-import { BoltRounded } from '@mui/icons-material'
 import { Box, ImageList, ImageListItem, List, Typography } from '@mui/material'
-
 import React, { useEffect, useState } from 'react'
 import ListUser from '../User/ListUser'
 import { getAllUsers, getLatestPosts, getSuggestedUsersData } from '../../Actions/User';
@@ -56,52 +54,57 @@ const RightBar = () => {
 
         <Typography variant='h6' sx={{ fontSize: "18px", fontWeight: "300" }}>Suggested for you</Typography>
 
-        {usersLoading && shimmerUsers.map((user, index) => <div key={index}> {user} </div>  ) }
+        {usersLoading && shimmerUsers.map((user, index) => <div key={index}> {user} </div>)}
+        {!usersLoading && suggestedUsers.length === 0 &&
+          <Typography variant='h6' textAlign={"center"}>No Users Yet</Typography>
+        }
+
         {!usersLoading &&
           <List sx={{ width: "100%", height: "215px", maxHeight: "275px", overflowY: "scroll" }}  >
             {
               suggestedUsers.map((user) => (
-              <ListUser key={user._id} avatar={user.avatar.url} name={user.name} userId={user._id} followers={user.followers} />
-            ))
-            
-          }
+                <ListUser key={user._id} avatar={user.avatar.url} name={user.name} userId={user._id} followers={user.followers} />
+              ))
+
+            }
           </List>
         }
 
         {/* lates posts image grid */}
 
-        <Typography variant='h6' sx={{ fontSize: "18px", fontWeight: "300", margin: "15px 0" }}>Latest Posts</Typography>
-        {/* <Box> */}
+        {latestPosts.length>0 &&
+          <>
+            <Typography variant='h6' sx={{ fontSize: "18px", fontWeight: "300", margin: "15px 0" }}>Latest Posts</Typography>
+     
 
-        <ImageList sx={{ minHeight: "300px" }} cols={3} gap={5}>
-          {latestPosts.map((post) => (
+            <ImageList sx={{ minHeight: "300px" }} cols={3} gap={5}>
+              {latestPosts.map((post) => (
 
-            <ImageListItem onClick={()=>{setOpenProfilePostModal(true); setActivePostId(post._id)}} key={post._id} sx={{ minHeight: "150px", maxHeight: "150px", maxWidth: "150ox", cursor: "pointer", overflow: "hidden" }}>
-              <img
-
-                src={post.image.url}
-                alt={"post image"}
-                loading="lazy"
-                style={{ objectFit: "cover" }}
-              // height="50px"
-              // width="50px"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
+                <ImageListItem onClick={() => { setOpenProfilePostModal(true); setActivePostId(post._id) }} key={post._id} sx={{ minHeight: "150px", maxHeight: "150px", maxWidth: "150ox", cursor: "pointer", overflow: "hidden" }}>
+                  <img
+                    src={post.image.url}
+                    alt={"post"}
+                    loading="lazy"
+                    style={{ objectFit: "cover" }}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </>
+        }
 
 
 
 
       </Box>
-      
+
       {
         openProfilePostModal &&
-       <ProfilePostModal
+        <ProfilePostModal
           postId={activePostId}
           openProfilePostModal={openProfilePostModal}
           setOpenProfilePostModal={setOpenProfilePostModal}
-       />
+        />
       }
     </Box>
   )

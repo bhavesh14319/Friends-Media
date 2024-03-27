@@ -16,6 +16,7 @@ const authSlice = createSlice({
         },
 
         closeAuthModal:(state,action)=>{
+            state.authLoading=false;
             state.openAuthModal=false
         },
         authRequest : (state,action)=>{
@@ -29,17 +30,25 @@ const authSlice = createSlice({
         },
         authFailure:(state,action)=>{
             state.authLoading=false;
-            state.authMessage=action.payload
+            state.isAuthenticated=false;
+            state.authMessage=action.payload;
         },
         // logout success will handle logout req success
         logoutSuccess:(state,action)=>{
             state.isAuthenticated=false;
             state.authorizedUser=null;
+            state.authLoading=false;
+        },
+
+        deleteAccountSuccess: (state,action)=>{
+            state.isAuthenticated=false;
+            state.authorizedUser=null;
+            state.authLoading=false;
         }
 
     }
 })
 
-export const {authLoading,authFailure,authRequest,authSuccess,openAuthModal,closeAuthModal,logoutSuccess} = authSlice.actions
+export const {authLoading,authFailure,authRequest,authSuccess,openAuthModal,closeAuthModal,logoutSuccess,deleteAccountSuccess} = authSlice.actions
 
 export default authSlice.reducer

@@ -4,31 +4,18 @@ import Feed from './Feed';
 import SideBar from './SideBar';
 import RightBar from './RightBar';
 import { Box, Stack } from '@mui/material';
-import SearchDrawer from '../Search/Search';
+
 
 
 const Home = () => {
 
-  
-
-
-
- 
-
-
-
   return (
-
-
-
     <Box>
-        <Stack direction="row" spacing={2} justifyContent="space-between"> 
+        <Stack sx={{minHeight:"100vh" }} direction="row" spacing={2} justifyContent="space-between"> 
             <SideBar/>
             <Feed />
             <RightBar/>
-           
         </Stack>
-      
     </Box>
   )
 }

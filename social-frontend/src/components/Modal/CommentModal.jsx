@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react'
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Collapse, Divider, Fade, IconButton, List, ListItem, ListItemAvatar, ListItemText, Modal, Paper, Popper, Stack, TextField, Typography } from '@mui/material'
-import { Favorite, MoreVert, ChatBubbleOutlineRounded, ChatBubble, AccountCircle, Mood } from '@mui/icons-material'
+import { Avatar, Box, Button, CardHeader, IconButton, List, Modal, Popper, TextField } from '@mui/material'
+import { MoreVert, Mood } from '@mui/icons-material'
 import CommentCard from '../commentCard/CommentCard'
 import Swal from 'sweetalert2'
 import EmojiPicker from 'emoji-picker-react'
@@ -64,7 +64,7 @@ const CommentModal = ({open,setOpen,owner,comments,postId,postImage}) => {
         >
             <Box sx={{ width: { xs: "90%", sm: "70%", md: "60%" }, height: "90%", m: "20px", background: "#f2f2f2", display: "flex" }}>
                 <Box flex={1} bgcolor={"red"} sx={{ display: { xs: 'none', sm: 'block' } }}>
-                    <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src={postImage} />
+                    <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src={postImage} alt='post' />
                 </Box>
                 <Box flex={1} >
                     <CardHeader

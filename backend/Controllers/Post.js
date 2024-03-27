@@ -38,7 +38,7 @@ const createPost = async (req,res)=>{
             folder:"posts"
         })
        
-        console.log(mycloud.secure_url);
+        // console.log(mycloud.secure_url);
         const newPostData = {
             caption : req.body.caption,
             image :{
@@ -123,7 +123,7 @@ const deletePost = async (req,res)=>{
             })
         }
 
-        console.log(post);
+        // console.log(post);
 
         if(post.owner.toString() !== req.user._id.toString()){
             return res.status(401).json({
