@@ -136,7 +136,7 @@ export const getSuggestedUsersData = (name = "") => async (dispatch) => {
             },
             withCredentials: true
         })
-        // console.log(res.data)
+        console.log(res.data)
         dispatch(suggestedUsersSuccess(res.data.users))
         return res.data
 
@@ -426,7 +426,7 @@ export const getFeedData = () => async (dispatch) => {
         dispatch(startPostsLoading())
         const res = await axios.get("/getFeedData");
 
-        // console.log(res.data);
+        console.log(res.data);
         dispatch(postsSuccess(res.data.posts))
         dispatch(stopPostsLoading());
 
@@ -463,6 +463,7 @@ export const getLatestPosts = () => async (dispatch) => {
 
         const res = await axios.get("/getLatestPosts");
 
+        console.log(res.data);
         dispatch(latestPostsSuccess(res.data.posts))
         return res.data;
 
