@@ -2,6 +2,7 @@
   "name": "social-frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy" :"https://blue-enthusiastic-cobra.cyclic.app/api/v1",
   "dependencies": {
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.14",
@@ -43,6 +44,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy":"https://blue-enthusiastic-cobra.cyclic.app/api/v1"
+  }
+  
+  
 }
