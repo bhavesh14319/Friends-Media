@@ -12,7 +12,7 @@ app.use(require("cookie-parser")())
 
 // app.use(cors());
 
-let allowedDomains = ['https://blue-enthusiastic-cobra.cyclic.app', 'http://localhost:3000'];
+let allowedDomains = ['https://friends-media.vercel.app', 'http://localhost:3000'];
 
 app.use(cors({
     origin: function (origin, callback) {
