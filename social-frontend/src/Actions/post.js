@@ -1,5 +1,4 @@
-import axios from "axios";
-
+import axios from "../axios";
 import { requestFailure, likeOrCommentSuccess, startLikeOrCommentLoading, stopLikeOrCommentLoading } from "../redux/feedSlice";
 import { createPostFailure, createPostRequest, createPostSuccess } from "../redux/createPostSlice";
 import { postFailure, postRequest, postSuccess } from "../redux/postSlice";

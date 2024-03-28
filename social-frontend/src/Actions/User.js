@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../axios"
 import { authFailure, authRequest, authSuccess, logoutSuccess } from "../redux/AuthSlice"
 import { latestPostsSuccess, postsSuccess, requestFailure, startPostsLoading, stopPostsLoading, suggestedUsersRequest, suggestedUsersSuccess } from "../redux/feedSlice"
 import { userFailure, userRequest, userSuccess } from "../redux/userSlice"
