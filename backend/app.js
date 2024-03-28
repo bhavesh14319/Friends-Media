@@ -12,10 +12,19 @@ app.use(require("cookie-parser")())
 
 // app.use(cors());
 
+let allowedDomains = ['https://blue-enthusiastic-cobra.cyclic.app', 'http://localhost:3000'];
+
 app.use(cors({
-    // origin: "https://friendsmedia.netlify.app",
-    // origin:"http://localhost:3000",
-    origin:"*",
+    origin: function (origin, callback) {
+        // bypass the requests with no origin (like curl requests, mobile apps, etc )
+        if (!origin) return callback(null, true);
+     
+        if (allowedDomains.indexOf(origin) === -1) {
+          var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
+          return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE'],
     credentials: true
 }))
