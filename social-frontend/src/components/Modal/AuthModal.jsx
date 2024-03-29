@@ -27,7 +27,7 @@ const AuthModal = () => {
 
 
   // states
-  const [email, setEmail] = useState("bhavesh@gmail.com");
+  const [email, setEmail] = useState("ganesh@gmail.com");
   const [password, setPassword] = useState("123456");
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
