@@ -2,13 +2,12 @@ import { Avatar, Box, Button, CircularProgress, Divider, IconButton, ImageList, 
 import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteProfile, logoutUser } from '../../Actions/User';
+import { logoutUser } from '../../Actions/User';
 import ProfilePostModal from '../Modal/ProfilePostModal';
 import ProfileShimmer from '../Shimmer/ProfileShimmer';
 import LikesFollowersFollowingModal from '../Modal/LikesFollowersFollowingModal';
 import { Delete, Settings } from '@mui/icons-material';
 import Swal from 'sweetalert2';
-import { deleteAccountSuccess } from '../../redux/AuthSlice';
 
 
 
@@ -107,39 +106,14 @@ const AccountContainer = () => {
             showCancelButton: "true",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                setDeleteAccountProcessing(true);
-                const res = await deleteProfile();
-
-
-                if (res.success) {
-                    dispatch(deleteAccountSuccess())
-                    Swal.fire({
-                        icon: "success",
-                        title: "Account deleted successfully...",
-                        toast: true,
-                        position: "bottom",
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    localStorage.removeItem("token");
-                    setOpenMenu(false);
-                    setDeleteAccountProcessing(false);
-                    navigate("/")
-                } else {
-                    setDeleteAccountProcessing(false);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Something went wrong...",
-                        text: `${res?.data.message}`,
-                        toast: true,
-                        position: "bottom",
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-
-                }
-
-
+                // setDeleteAccountProcessing(true);
+                Swal.fire({
+                    icon:"info",
+                    text:"Delete function is disabled for testing purpose.",
+                    confirmButtonText:"Ok",
+                    showCancelButton:false
+                })
+                setOpenMenu(false);
             }
         })
     }

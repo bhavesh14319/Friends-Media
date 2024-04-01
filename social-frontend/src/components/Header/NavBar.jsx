@@ -66,9 +66,9 @@ const NavBar = (props) => {
         <ListItem onClick={handleCreatePost}><ListItemIcon ><AddRounded sx={{ border: "3px solid #707070", borderRadius: "5px" }} /></ListItemIcon> <ListItemText primary="Create"></ListItemText> </ListItem>,
 
         isAuthenticated ?
-            <Link to={`/profile/`}> <ListItem><ListItemIcon><Avatar sx={{ height: "1em", width: "1em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem> </Link>
+            <Link to={`/profile/`}> <ListItem><ListItemIcon sx={{marginLeft:"2px"}}><Avatar sx={{ height: "1.25em", width: "1.25em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem> </Link>
             :
-            <ListItem onClick={handleCreatePost}><ListItemIcon><Avatar sx={{ height: "1em", width: "1em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem>
+            <ListItem onClick={handleCreatePost}><ListItemIcon><Avatar sx={{ height: "1.25em", width: "1.25em" }} /></ListItemIcon> <ListItemText primary="Profile"></ListItemText> </ListItem>
 
 
     ];
